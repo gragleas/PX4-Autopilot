@@ -81,18 +81,18 @@
       	<pose>0 2.29 0.25 1.57 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/home/graham/Downloads/meshes/port.dae</uri>
+            <uri>meshes/port.dae</uri>
           </mesh>
-          <material><texture filename="/home/graham/Downloads/port_Base_Color.png"/></material>
+          <material><texture filename="meshes/port_Base_Color.png"/></material>
         </geometry>
       </visual>
       <visual name="port_hull_cover_visual">
       	<pose>0 0.23 0.25 1.57 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/home/graham/Downloads/meshes/port.dae</uri>
+            <uri>meshes/port.dae</uri>
           </mesh>
-          <material><texture filename="/home/graham/Downloads/port_Base_Color.png"/></material>
+          <material><texture filename="meshes/port_Base_Color.png"/></material>
         </geometry>
       </visual>
       
@@ -103,7 +103,7 @@
         <pose>-0.002 2.473 0.3 1.57 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/home/graham/Downloads/meshes/starboard_hull.stl</uri>
+            <uri>meshes/starboard_hull.stl</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -128,7 +128,7 @@
         <pose>0.012 0.235 0.25 1.57 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/home/graham/Downloads/meshes/port_hull.stl</uri>
+            <uri>meshes/port_hull.stl</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -155,15 +155,15 @@
       	<pose>1.776 0 0.85 1.57 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/home/graham/Downloads/meshes/scaled_trampoline.dae</uri>
+            <uri>meshes/scaled_trampoline.dae</uri>
           </mesh>
-          <material><texture filename="/home/graham/Downloads/scaled_trampoline_Base_Color.png"/></material>
+          <material><texture filename="meshes/scaled_trampoline_Base_Color.png"/></material>
         </geometry>
       </visual>
       <collision name="base_collision">
         <geometry>
           <mesh>
-            <uri>/home/graham/gz_ws/src/asv_wave_sim/gz-waves-models/models/wam-v/meshes/WAM-V-Base.dae</uri>
+            <uri>meshes/WAM-V-Base.dae</uri>
           </mesh>
         </geometry>
       </collision>
@@ -196,9 +196,9 @@
       	<pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>/home/graham/Downloads/meshes/rudder.dae</uri>
+            <uri>meshes/rudder.dae</uri>
           </mesh>
-          <material><texture filename="/home/graham/Downloads/rudder_Base_Color.png"/></material>
+          <material><texture filename="meshes/rudder_Base_Color.png"/></material>
         </geometry>
       </visual>
       <collision name='collision'>
@@ -207,7 +207,7 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/home/graham/Downloads/meshes/rudder.stl</uri>
+            <uri>meshes/rudder.stl</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -276,9 +276,9 @@
       	<pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>/home/graham/Downloads/meshes/rudder.dae</uri>
+            <uri>meshes/rudder.dae</uri>
           </mesh>
-          <material><texture filename="/home/graham/Downloads/rudder_Base_Color.png"/></material>
+          <material><texture filename="meshes/rudder_Base_Color.png"/></material>
         </geometry>
       </visual>
       <collision name='collision'>
@@ -287,7 +287,7 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/home/graham/Downloads/meshes/rudder.stl</uri>
+            <uri>meshes/rudder.stl</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -438,9 +438,9 @@
       	<pose>0 0.5 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/home/graham/Downloads/meshes/wing.dae</uri>
+            <uri>meshes/wing.dae</uri>
           </mesh>
-          <material><texture filename="/home/graham/Downloads/meshes/wing.png"/></material>
+          <material><texture filename="meshes/wing.png"/></material>
         </geometry>
       </visual>
     </link>
@@ -463,9 +463,9 @@
       	<pose>0 0.5 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/home/graham/Downloads/meshes/wing.dae</uri>
+            <uri>meshes/wing.dae</uri>
           </mesh>
-          <material><texture filename="/home/graham/Downloads/meshes/wing.png"/></material>
+          <material><texture filename="meshes/wing.png"/></material>
         </geometry>
       </visual>
     </link>
