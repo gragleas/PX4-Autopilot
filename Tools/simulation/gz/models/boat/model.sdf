@@ -2,7 +2,6 @@
 <sdf version='1.7'>
   <model name='boat_0'>
     <!-- The trampoline frame is the base link that everything else is attached to -->
-    <enable_lockstep>true</enable_lockstep>
     <link name='base_link'>
       <pose>0 0 0 0 -0 0</pose>
       <inertial>
@@ -83,7 +82,6 @@
           <mesh>
             <uri>meshes/port.dae</uri>
           </mesh>
-          <material><texture filename="meshes/port_Base_Color.png"/></material>
         </geometry>
       </visual>
       <visual name="port_hull_cover_visual">
@@ -92,7 +90,6 @@
           <mesh>
             <uri>meshes/port.dae</uri>
           </mesh>
-          <material><texture filename="meshes/port_Base_Color.png"/></material>
         </geometry>
       </visual>
       
@@ -157,7 +154,6 @@
           <mesh>
             <uri>meshes/scaled_trampoline.dae</uri>
           </mesh>
-          <material><texture filename="meshes/scaled_trampoline_Base_Color.png"/></material>
         </geometry>
       </visual>
       <collision name="base_collision">
@@ -198,7 +194,6 @@
           <mesh>
             <uri>meshes/rudder.dae</uri>
           </mesh>
-          <material><texture filename="meshes/rudder_Base_Color.png"/></material>
         </geometry>
       </visual>
       <collision name='collision'>
@@ -278,7 +273,6 @@
           <mesh>
             <uri>meshes/rudder.dae</uri>
           </mesh>
-          <material><texture filename="meshes/rudder_Base_Color.png"/></material>
         </geometry>
       </visual>
       <collision name='collision'>
@@ -386,8 +380,8 @@
       <cp>0.5 0.02 0.12</cp>
       <area>0.354</area>
       <air_density>997</air_density>
-      <forward>0 0 -1</forward>
-      <upward>1 0 0</upward>
+      <forward>1 0 0</forward>
+      <upward>0 0 -1</upward>
       <link_name>base_link</link_name>
       <control_joint_name>px4_servo_0</control_joint_name>
       <control_joint_rad_to_cl>0.8</control_joint_rad_to_cl>
@@ -409,8 +403,8 @@
       <cp>0.5 0.02 0.12</cp>
       <area>0.354</area>
       <air_density>997</air_density>
-      <forward>0 0 -1</forward>
-      <upward>1 0 0</upward>
+      <forward>1 0 0</forward>
+      <upward>0 0 -1</upward>
       <link_name>base_link</link_name>
       <control_joint_name>px4_servo_1</control_joint_name>
       <control_joint_rad_to_cl>0.8</control_joint_rad_to_cl>
@@ -440,7 +434,6 @@
           <mesh>
             <uri>meshes/wing.dae</uri>
           </mesh>
-          <material><texture filename="meshes/wing.png"/></material>
         </geometry>
       </visual>
     </link>
@@ -465,7 +458,6 @@
           <mesh>
             <uri>meshes/wing.dae</uri>
           </mesh>
-          <material><texture filename="meshes/wing.png"/></material>
         </geometry>
       </visual>
     </link>
@@ -481,7 +473,6 @@
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
-        <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
     
@@ -495,7 +486,6 @@
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
-        <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
     
@@ -509,7 +499,7 @@
       <motorConstant>2.44858e-05</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
-      <motorNumber>2</motorNumber>
+      <motorNumber>0</motorNumber>
       <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
       <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
@@ -526,7 +516,7 @@
       <motorConstant>2.44858e-05</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
-      <motorNumber>3</motorNumber>
+      <motorNumber>1</motorNumber>
       <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
       <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
@@ -541,6 +531,7 @@
 		    <enable>boat_0::base_link</enable>
 		    <enable>boat_0::rudder_1</enable>
 		    <enable>boat_0::rudder_2</enable>
+
 
 		    <!-- <enable>wam-v::left_engine_link</enable>
 		    <enable>wam-v::left_propeller_link</enable>
