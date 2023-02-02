@@ -24,7 +24,7 @@
         <scene>scene</scene>
         <ambient_light>0.5984631152222222 0.5984631152222222 0.5984631152222222</ambient_light>
         <background_color>0.8984631152222222 0.8984631152222222 0.8984631152222222</background_color>
-        <camera_pose>-6 0 6 0 0.5 0</camera_pose>
+        <camera_pose>7 0 6 0 0.5 3.14</camera_pose>
       </plugin>
       <plugin name='World control' filename='WorldControl'>
         <ignition-gui>
@@ -240,6 +240,24 @@
 		        </param>
 		      </plugin>
 		    </visual>
+		    <visual name="visual_abcedf">
+		    	<pose>-10 0 -10 0 0 0</pose>
+		      <geometry>
+		        <mesh>
+		        	<uri>/home/graham/Downloads/meshes/heightmap2.dae</uri>
+		        	<scale>100 100 100</scale>
+		        </mesh>
+		      </geometry>
+      	</visual>
+      	<collision name="collision_abcedf">
+		    	<pose>-10 0 -10 0 0 0</pose>
+		      <geometry>
+		        <mesh>
+		        	<uri>/home/graham/Downloads/meshes/heightmap2.dae</uri>
+		        	<scale>100 100 100</scale>
+		        </mesh>
+		      </geometry>
+      	</collision>
 		  </link>
 		</model>
 		

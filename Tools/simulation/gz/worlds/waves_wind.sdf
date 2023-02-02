@@ -106,15 +106,15 @@
         <direction>
           <time_for_rise>1</time_for_rise>
           <sin>
-            <amplitude>5</amplitude>
-            <period>20</period>
+            <amplitude>2</amplitude>
+            <period>30</period>
           </sin>
         </direction>
       </horizontal>
     </plugin>
 
     <wind>
-      <linear_velocity>0 0 0</linear_velocity>
+      <linear_velocity>-10 0 0</linear_velocity>
     </wind>
 
     <scene>
@@ -274,6 +274,24 @@
 		        </param>
 		      </plugin>
 		    </visual>
+		    <visual name="visual_abcedf">
+		    	<pose>-10 0 -10 0 0 0</pose>
+		      <geometry>
+		        <mesh>
+		        	<uri>/home/graham/Downloads/meshes/heightmap2.dae</uri>
+		        	<scale>100 100 100</scale>
+		        </mesh>
+		      </geometry>
+      	</visual>
+      	<collision name="collision_abcedf">
+		    	<pose>-10 0 -10 0 0 0</pose>
+		      <geometry>
+		        <mesh>
+		        	<uri>/home/graham/Downloads/meshes/heightmap2.dae</uri>
+		        	<scale>100 100 100</scale>
+		        </mesh>
+		      </geometry>
+      	</collision>
 		  </link>
 		</model>
 		
