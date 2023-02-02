@@ -165,10 +165,54 @@
       </collision>
       <sensor name="imu_sensor" type="imu">
         <always_on>1</always_on>
+        <pose>0 0 0 0 0 3.14</pose>
         <update_rate>250</update_rate>
-        <pose>0 0 0 0 0 1.57</pose>
       </sensor>
     </link>
+    <link name="airspeed">
+      <pose>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.015</mass>
+        <inertia>
+          <ixx>1e-05</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1e-05</iyy>
+          <iyz>0</iyz>
+          <izz>1e-05</izz>
+        </inertia>
+      </inertial>
+      <visual name="visual">
+        <geometry>
+          <cylinder>
+            <radius>0.01</radius>
+            <length>0.1</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1.0</ambient>
+          <diffuse>0 0 0 1.0</diffuse>
+        </material>
+      </visual>
+      <!-- <sensor name="air_speed" type="air_speed">
+        <always_on>1</always_on>
+        <update_rate>5.0</update_rate>
+        <enable_metrics>false</enable_metrics>
+        <air_speed>
+          <airspeed>
+            <noise type="gaussian">
+              <mean>0</mean>
+              <stddev>0.01</stddev>
+            </noise>
+          </airspeed>
+        </air_speed>
+      </sensor> -->
+    </link>
+    <joint name='airspeed_joint' type='fixed'>
+      <child>airspeed</child>
+      <parent>base_link</parent>
+    </joint>
     
     <link name='rudder_1'>
       <inertial>
@@ -202,7 +246,7 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>meshes/rudder.stl</uri>
+            <uri>/home/graham/Downloads/meshes/rudder.stl</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -281,7 +325,7 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>meshes/rudder.stl</uri>
+            <uri>/home/graham/Downloads/meshes/rudder.stl</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -333,7 +377,7 @@
       </collision>
     </link>
     
-    <joint name='px4_servo_0' type='revolute'>
+    <joint name='servo_0' type='revolute'>
       <parent>base_link</parent>
       <child>rudder_1</child>
       <pose>0.85 0.02 0 0 -0 0</pose>
@@ -345,12 +389,11 @@
         </limit>
         <dynamics>
           <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-          <damping>1.000</damping>
+          <spring_stiffness>0.5</spring_stiffness>
         </dynamics>
       </axis>
     </joint>
-    <joint name='px4_servo_1' type='revolute'>
+    <joint name='servo_1' type='revolute'>
       <parent>base_link</parent>
       <child>rudder_2</child>
       <pose>0.85 0.02 0 0 -0 0</pose>
@@ -362,17 +405,18 @@
         </limit>
         <dynamics>
           <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-          <damping>1.000</damping>
+          <spring_stiffness>0.5</spring_stiffness>
         </dynamics>
       </axis>
     </joint>
     
-    <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
-      <a0>0</a0>
+		
+		
+		<plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
+      <a0>0.191986</a0>
       <cla>0.1</cla>
       <cda>0.2</cda>
-      <cma>0.0</cma>
+      <cma>0</cma>
       <alpha_stall>0.471239</alpha_stall>
       <cla_stall>-0.666666</cla_stall>
       <cda_stall>0.00275</cda_stall>
@@ -380,22 +424,31 @@
       <cp>0.5 0.02 0.12</cp>
       <area>0.354</area>
       <air_density>997</air_density>
-      <forward>1 0 0</forward>
-      <upward>0 0 -1</upward>
+      <forward>0 0 -1</forward>
+      <upward>1 0 0</upward>
       <link_name>base_link</link_name>
-      <control_joint_name>px4_servo_0</control_joint_name>
-      <control_joint_rad_to_cl>0.8</control_joint_rad_to_cl>
+      <control_joint_name>servo_0</control_joint_name>
+      <control_joint_rad_to_cl>-0.3</control_joint_rad_to_cl>
     </plugin>
     <plugin
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
-      <joint_name>px4_servo_0</joint_name>
+      <joint_name>servo_0</joint_name>
+      <sub_topic>servo_0</sub_topic>
+      <p_gain>1</p_gain>
+      <i_gain>0.1</i_gain>
+      <d_gain>.5</d_gain>
+      <i_max>1</i_max>
+      <i_min>-1</i_min>
+      <cmd_max>1000</cmd_max>
+      <cmd_min>-1000</cmd_min>
     </plugin>
     
+    
     <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
-      <a0>0</a0>
+      <a0>0.191986</a0>
       <cla>0.1</cla>
       <cda>0.2</cda>
-      <cma>0.0</cma>
+      <cma>0</cma>
       <alpha_stall>0.471239</alpha_stall>
       <cla_stall>-0.666666</cla_stall>
       <cda_stall>0.00275</cda_stall>
@@ -403,15 +456,23 @@
       <cp>0.5 0.02 0.12</cp>
       <area>0.354</area>
       <air_density>997</air_density>
-      <forward>1 0 0</forward>
-      <upward>0 0 -1</upward>
+      <forward>0 0 -1</forward>
+      <upward>1 0 0</upward>
       <link_name>base_link</link_name>
-      <control_joint_name>px4_servo_1</control_joint_name>
-      <control_joint_rad_to_cl>0.8</control_joint_rad_to_cl>
+      <control_joint_name>servo_1</control_joint_name>
+      <control_joint_rad_to_cl>-0.3</control_joint_rad_to_cl>
     </plugin>
     <plugin
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
-      <joint_name>px4_servo_1</joint_name>
+      <joint_name>servo_1</joint_name>
+      <sub_topic>servo_1</sub_topic>
+      <p_gain>1</p_gain>
+      <i_gain>0.1</i_gain>
+      <d_gain>.5</d_gain>
+      <i_max>1</i_max>
+      <i_min>-1</i_min>
+      <cmd_max>1000</cmd_max>
+      <cmd_min>-1000</cmd_min>
     </plugin>
     
     <link name='wing_1'>
@@ -529,8 +590,6 @@
 		    name="gz::sim::systems::Hydrodynamics">
 		    
 		    <enable>boat_0::base_link</enable>
-		    <enable>boat_0::rudder_1</enable>
-		    <enable>boat_0::rudder_2</enable>
 
 
 		    <!-- <enable>wam-v::left_engine_link</enable>
