@@ -214,6 +214,188 @@
       <parent>base_link</parent>
     </joint>
     
+    <link name='left_propeller_link'>
+      <pose>4.34739 0.996639 0.009682 3.1344 1.57079 -9.8e-05</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>0.5</mass>
+        <inertia>
+          <ixx>0.008545</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.008545</iyy>
+          <iyz>0</iyz>
+          <izz>0.0144</izz>
+        </inertia>
+      </inertial>
+      <self_collide>0</self_collide>
+      <enable_wind>1</enable_wind>
+      <kinematic>0</kinematic>
+      <gravity>1</gravity>
+      <visual name='left_propeller_link_visual'>
+        <pose>0 0 0 0 -1.57079 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/propeller.dae</uri>
+          </mesh>
+        </geometry>
+        <transparency>0</transparency>
+        <cast_shadows>1</cast_shadows>
+        <material>
+          <shader type='pixel'/>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+      <collision name='left_propeller_link_fixed_joint_lump__left_propeller_collision_collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose>-0.02 0 -0.08 3.14159 -0 3.14159</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.24</radius>
+            <length>0.18</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+              <fdir1>0 0 0</fdir1>
+              <slip1>0</slip1>
+              <slip2>0</slip2>
+            </ode>
+            <torsional>
+              <coefficient>1</coefficient>
+              <patch_radius>0</patch_radius>
+              <surface_radius>0</surface_radius>
+              <use_patch_radius>1</use_patch_radius>
+              <ode>
+                <slip>0</slip>
+              </ode>
+            </torsional>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+              <max_vel>0.01</max_vel>
+              <min_depth>0</min_depth>
+            </ode>
+            <bullet>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    
+    <link name='right_propeller_link'>
+      <pose>4.34739 1.93559 0.009682 3.1344 1.57079 -9.8e-05</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>0.5</mass>
+        <inertia>
+          <ixx>0.008545</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.008545</iyy>
+          <iyz>0</iyz>
+          <izz>0.0144</izz>
+        </inertia>
+      </inertial>
+      <self_collide>0</self_collide>
+      <enable_wind>1</enable_wind>
+      <kinematic>0</kinematic>
+      <gravity>1</gravity>
+      <visual name='right_propeller_link_visual'>
+        <pose>0 0 0 0 -1.57079 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://boat/meshes/propeller.dae</uri>
+          </mesh>
+        </geometry>
+        <transparency>0</transparency>
+        <cast_shadows>1</cast_shadows>
+        <material>
+          <shader type='pixel'/>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+      <collision name='right_propeller_link_fixed_joint_lump__right_propeller_collision_collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose>0 0 -0.1 3.14159 -0 3.14159</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.24</radius>
+            <length>0.18</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+              <fdir1>0 0 0</fdir1>
+              <slip1>0</slip1>
+              <slip2>0</slip2>
+            </ode>
+            <torsional>
+              <coefficient>1</coefficient>
+              <patch_radius>0</patch_radius>
+              <surface_radius>0</surface_radius>
+              <use_patch_radius>1</use_patch_radius>
+              <ode>
+                <slip>0</slip>
+              </ode>
+            </torsional>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+              <max_vel>0.01</max_vel>
+              <min_depth>0</min_depth>
+            </ode>
+            <bullet>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    
     <link name='rudder_1'>
       <inertial>
         <mass>1</mass>
@@ -377,6 +559,69 @@
       </collision>
     </link>
     
+    <joint name='left_engine_propeller_joint' type='revolute'>
+      <parent>base_link</parent>
+      <child>left_propeller_link</child>
+      <pose>0 0 0 0 -0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1.79769e+308</lower>
+          <upper>1.79769e+308</upper>
+          <effort>-1</effort>
+          <velocity>-1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+          <damping>0</damping>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </limit>
+          <suspension>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </suspension>
+        </ode>
+      </physics>
+    </joint>
+    <joint name='right_engine_propeller_joint' type='revolute'>
+      <parent>base_link</parent>
+      <child>right_propeller_link</child>
+      <pose>0 0 0 0 -0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1.79769e+308</lower>
+          <upper>1.79769e+308</upper>
+          <effort>-1</effort>
+          <velocity>-1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+          <damping>0</damping>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </limit>
+          <suspension>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </suspension>
+        </ode>
+      </physics>
+    </joint>
+    
     <joint name='servo_0' type='revolute'>
       <parent>base_link</parent>
       <child>rudder_1</child>
@@ -410,59 +655,23 @@
       </axis>
     </joint>
     
-    <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
-      <a0>0</a0>
-      <cla>5.7295755</cla>
-      <cda>0</cda>
-      <cma>0</cma>
-      <alpha_stall>0.261799</alpha_stall>
-      <cla_stall>-1.43239387</cla_stall>
-      <cda_stall>0</cda_stall>
-      <cma_stall>0</cma_stall>
-      <cp>0.3 3.30 0</cp>
-      <area>21.115</area>
-      <air_density>1.29</air_density>
-      <forward>0 0 -1</forward>
-      <upward>0 0 -1</upward>
-      <link_name>wing_1</link_name>
-      <control_joint_name>base_link_wing_1</control_joint_name>
-      <control_joint_rad_to_cl>-1.0</control_joint_rad_to_cl>
-    </plugin>
-    
-    <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
-      <a0>0</a0>
+		
+		
+		<plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
+      <a0>0.191986</a0>
       <cla>0.1</cla>
       <cda>0.2</cda>
       <cma>0</cma>
-      <alpha_stall>0.20944</alpha_stall>
-      <cla_stall>-1.71887265</cla_stall>
-      <cda_stall>0</cda_stall>
-      <cma_stall>0</cma_stall>
-      <cp>0.3 3.30 0</cp>
-      <area>21.115</area>
-      <air_density>1.29</air_density>
-      <forward>0 0 -1</forward>
-      <upward>0 0 -1</upward>
-      <link_name>wing_2</link_name>
-      <control_joint_name>base_link_wing_2</control_joint_name>
-      <control_joint_rad_to_cl>-1.0</control_joint_rad_to_cl>
-    </plugin>
-		
-		<plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
-      <a0>0</a0>
-      <cla>12.87549059</cla>
-      <cda>0</cda>
-      <cma>0</cma>
-      <alpha_stall>0.139626</alpha_stall>
-      <cla_stall>-2.85478775</cla_stall>
-      <cda_stall>0</cda_stall>
+      <alpha_stall>0.471239</alpha_stall>
+      <cla_stall>-0.666666</cla_stall>
+      <cda_stall>0.00275</cda_stall>
       <cma_stall>0</cma_stall>
       <cp>0.5 0.02 0.12</cp>
       <area>0.354</area>
       <air_density>997</air_density>
       <forward>0 0 -1</forward>
-      <upward>0 1 0</upward>
-      <link_name>rudder_1</link_name>
+      <upward>1 0 0</upward>
+      <link_name>base_link</link_name>
       <control_joint_name>servo_0</control_joint_name>
       <control_joint_rad_to_cl>-0.3</control_joint_rad_to_cl>
     </plugin>
@@ -481,20 +690,20 @@
     
     
     <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
-      <a0>0</a0>
-      <cla>12.87549059</cla>
-      <cda>0</cda>
+      <a0>0.191986</a0>
+      <cla>0.1</cla>
+      <cda>0.2</cda>
       <cma>0</cma>
-      <alpha_stall>0.139626</alpha_stall>
-      <cla_stall>-2.85478775</cla_stall>
-      <cda_stall>0</cda_stall>
+      <alpha_stall>0.471239</alpha_stall>
+      <cla_stall>-0.666666</cla_stall>
+      <cda_stall>0.00275</cda_stall>
       <cma_stall>0</cma_stall>
       <cp>0.5 0.02 0.12</cp>
       <area>0.354</area>
       <air_density>997</air_density>
       <forward>0 0 -1</forward>
-      <upward>0 1 0</upward>
-      <link_name>rudder_2</link_name>
+      <upward>1 0 0</upward>
+      <link_name>base_link</link_name>
       <control_joint_name>servo_1</control_joint_name>
       <control_joint_rad_to_cl>-0.3</control_joint_rad_to_cl>
     </plugin>
@@ -511,112 +720,37 @@
       <cmd_min>-1000</cmd_min>
     </plugin>
     
-    <link name='wing_1'>
-      <pose>2.47482 2.49991 0.615342 1.57 0 3.14</pose>
-      <inertial>
-        <pose>.4 3.25 0 0 -0 0</pose>
-        <mass>20</mass>
-        <inertia>
-          <ixx>46.89045</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0.7065</iyy>
-          <iyz>0</iyz>
-          <izz>47.4867</izz>
-        </inertia>
-      </inertial>
-      <visual name="visual">
-      	<pose>0 0.5 0 0 -0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>meshes/wing.dae</uri>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-    
-    <link name='wing_2'>
-      <pose>4.51199 2.49807 0.615342 1.57 0 3.14</pose>
-      <inertial>
-        <pose>.4 3.25 0 0 -0 0</pose>
-        <mass>20</mass>
-        <inertia>
-          <ixx>46.89045</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0.7065</iyy>
-          <iyz>0</iyz>
-          <izz>47.4867</izz>
-        </inertia>
-      </inertial>
-      <visual name="visual">
-      	<pose>0 0.5 0 0 -0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>meshes/wing.dae</uri>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-    
-    <!--  ################## JOINTS ###################### -->
-    <joint name='base_link_wing_1' type='revolute'>
-      <parent>base_link</parent>
-      <child>wing_1</child>
-      <pose>0.305 0 0 0 -0 0</pose>
-      <axis>
-        <xyz>0 1 0</xyz>
-        <dynamics>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-        </dynamics>
-      </axis>
-    </joint>
-    
-    <joint name='base_link_wing_2' type='revolute'>
-      <parent>base_link</parent>
-      <child>wing_2</child>
-      <pose>0.305 0 0 0 -0 0</pose>
-      <axis>
-        <xyz>0 1 0</xyz>
-        <dynamics>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-        </dynamics>
-      </axis>
-    </joint>
-    
     <plugin filename="ignition-gazebo-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
-      <jointName>base_link_wing_1</jointName>
-      <linkName>wing_1</linkName>
+      <jointName>left_engine_propeller_joint</jointName>
+      <linkName>left_propeller_link</linkName>
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>10</maxRotVelocity>
-      <motorConstant>2.44858e-05</motorConstant>
-      <momentConstant>0.016</momentConstant>
+      <maxRotVelocity>20</maxRotVelocity>
+      <motorConstant>8.54858e-02</motorConstant>
+      <momentConstant>0.01</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
       <motorNumber>0</motorNumber>
       <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
       <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
-      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <rotorVelocitySlowdownSim>20</rotorVelocitySlowdownSim>
       <motorType>velocity</motorType>
     </plugin>
     
     <plugin filename="ignition-gazebo-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
-      <jointName>base_link_wing_2</jointName>
-      <linkName>wing_2</linkName>
+      <jointName>right_engine_propeller_joint</jointName>
+      <linkName>right_propeller_link</linkName>
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>10</maxRotVelocity>
-      <motorConstant>2.44858e-05</motorConstant>
-      <momentConstant>0.016</momentConstant>
+      <maxRotVelocity>20</maxRotVelocity>
+      <motorConstant>8.54858e-02</motorConstant>
+      <momentConstant>0.01</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
       <motorNumber>1</motorNumber>
       <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
       <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
-      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <rotorVelocitySlowdownSim>20</rotorVelocitySlowdownSim>
       <motorType>velocity</motorType>
     </plugin>
     
@@ -625,7 +759,8 @@
 		    filename="libgz-waves1-hydrodynamics-system.so"
 		    name="gz::sim::systems::Hydrodynamics">
 		    
-		    <enable>boat_0::base_link</enable>
+		    <enable>aux_boat_0::base_link</enable>
+
 
 
 		    <!-- <enable>wam-v::left_engine_link</enable>
