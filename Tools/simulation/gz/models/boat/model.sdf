@@ -224,7 +224,7 @@
   			<pose>0.012 0.235 0.25 1.57 -0 0</pose>
 	      <geometry>
 	        <mesh>
-	          <uri>meshes/port_hull.stl</uri>
+	          <uri>meshes/port.dae</uri>
 	          <scale>1 1 1</scale>
 	        </mesh><gravity>1</gravity>
       <self_collide>0</self_collide>
@@ -283,7 +283,7 @@
   			<pose>-0.002 2.473 0.3 1.57 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>meshes/starboard_hull.stl</uri>
+            <uri>meshes/starboard.dae</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -446,17 +446,19 @@
     </plugin>
 		
 		<plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
-      <a0>0</a0>
-      <cla>6.1</cla>
-      <cda>0.5</cda>
-      <alpha_stall>0.139626</alpha_stall>
-      <cla_stall>-2.85478775</cla_stall>
-      <cda_stall>0.05</cda_stall>
-      <cp>5.25 0.41 .5</cp>
+      <a0>0.191986</a0>
+      <cla>0.1</cla>
+      <cda>0.2</cda>
+      <cma>0</cma>
+      <alpha_stall>0.471239</alpha_stall>
+      <cla_stall>-0.666666</cla_stall>
+      <cda_stall>0.00275</cda_stall>
+      <cma_stall>0</cma_stall>
+      <cp>0.5 0.02 0.12</cp>
       <area>0.354</area>
       <air_density>997</air_density>
-      <forward>-1 0 0</forward>
-      <upward>0 1 0</upward>
+      <forward>0 0 -1</forward>
+      <upward>1 0 0</upward>
       <link_name>rudder_1</link_name>
       <control_joint_name>servo_0</control_joint_name>
       <control_joint_rad_to_cl>-0.3</control_joint_rad_to_cl>
@@ -475,17 +477,19 @@
     
     
     <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
-      <a0>0</a0>
-      <cla>6.1</cla>
-      <cda>0.5</cda>
-      <alpha_stall>0.139626</alpha_stall>
-      <cla_stall>-2.85478775</cla_stall>
-      <cda_stall>0.05</cda_stall>
-      <cp>5.25 2.46 .5 0 0 0</cp>
+      <a0>0.191986</a0>
+      <cla>0.1</cla>
+      <cda>0.2</cda>
+      <cma>0</cma>
+      <alpha_stall>0.471239</alpha_stall>
+      <cla_stall>-0.666666</cla_stall>
+      <cda_stall>0.00275</cda_stall>
+      <cma_stall>0</cma_stall>
+      <cp>0.5 0.02 0.12</cp>
       <area>0.354</area>
       <air_density>997</air_density>
-      <forward>-1 0 0</forward>
-      <upward>0 1 0</upward>
+      <forward>0 0 -1</forward>
+      <upward>1 0 0</upward>
       <link_name>rudder_2</link_name>
       <control_joint_name>servo_1</control_joint_name>
       <control_joint_rad_to_cl>-0.3</control_joint_rad_to_cl>
