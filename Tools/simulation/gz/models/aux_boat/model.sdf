@@ -374,9 +374,9 @@
       </axis>
     </joint>
     
-    <link name='left_propeller_link'>
-      <pose>4.34739 0.996639 0.009682 3.1344 1.57079 -9.8e-05</pose>
-      <inertial>
+    <link name="left_propeller_link">
+    	<pose>4.34739 1.147 0.659682 3.1344 1.57079 -9.8e-05</pose>
+    	<inertial>
         <pose>0 0 0 0 -0 0</pose>
         <mass>0.5</mass>
         <inertia>
@@ -410,7 +410,7 @@
       <collision name='left_propeller_link_fixed_joint_lump__left_propeller_collision_collision'>
         <laser_retro>0</laser_retro>
         <max_contacts>10</max_contacts>
-        <pose>-0.02 0 -0.08 3.14159 -0 3.14159</pose>
+        <pose>0 0 0 0 0 0</pose>
         <geometry>
           <cylinder>
             <radius>0.24</radius>
@@ -463,27 +463,27 @@
           </contact>
         </surface>
       </collision>
-    </link>
-    
-    <link name='right_propeller_link'>
-      <pose>4.34739 1.93559 0.009682 3.1344 1.57079 -9.8e-05</pose>
-      <inertial>
-        <pose>0 0 0 0 -0 0</pose>
-        <mass>0.5</mass>
-        <inertia>
-          <ixx>0.008545</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0.008545</iyy>
-          <iyz>0</iyz>
-          <izz>0.0144</izz>
-        </inertia>
-      </inertial>
-      <self_collide>0</self_collide>
-      <enable_wind>1</enable_wind>
-      <kinematic>0</kinematic>
-      <gravity>1</gravity>
-      <visual name='right_propeller_link_visual'>
+	</link>
+
+    <link name="right_propeller_link">
+        <pose>4.34739 1.85559 0.659682 3.1344 1.57079 -9.8e-05</pose>
+		<inertial>
+            <pose>0 0 0 0 -0 0</pose>
+            <mass>0.5</mass>
+            <inertia>
+              <ixx>0.008545</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0.008545</iyy>
+              <iyz>0</iyz>
+              <izz>0.0144</izz>
+            </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <enable_wind>1</enable_wind>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+        <visual name='right_propeller_link_visual'>
         <pose>0 0 0 0 -1.57079 0</pose>
         <geometry>
           <mesh>
@@ -497,63 +497,63 @@
           <shader type='pixel'/>
           <emissive>0 0 0 1</emissive>
         </material>
-      </visual>
-      <collision name='right_propeller_link_fixed_joint_lump__right_propeller_collision_collision'>
-        <laser_retro>0</laser_retro>
-        <max_contacts>10</max_contacts>
-        <pose>0 0 -0.1 3.14159 -0 3.14159</pose>
-        <geometry>
-          <cylinder>
-            <radius>0.24</radius>
-            <length>0.18</length>
-          </cylinder>
-        </geometry>
-        <surface>
-          <friction>
-            <ode>
-              <mu>1</mu>
-              <mu2>1</mu2>
-              <fdir1>0 0 0</fdir1>
-              <slip1>0</slip1>
-              <slip2>0</slip2>
-            </ode>
-            <torsional>
-              <coefficient>1</coefficient>
-              <patch_radius>0</patch_radius>
-              <surface_radius>0</surface_radius>
-              <use_patch_radius>1</use_patch_radius>
-              <ode>
-                <slip>0</slip>
-              </ode>
-            </torsional>
-          </friction>
-          <bounce>
-            <restitution_coefficient>0</restitution_coefficient>
-            <threshold>1e+06</threshold>
-          </bounce>
-          <contact>
-            <collide_without_contact>0</collide_without_contact>
-            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-            <collide_bitmask>1</collide_bitmask>
-            <ode>
-              <soft_cfm>0</soft_cfm>
-              <soft_erp>0.2</soft_erp>
-              <kp>1e+13</kp>
-              <kd>1</kd>
-              <max_vel>0.01</max_vel>
-              <min_depth>0</min_depth>
-            </ode>
-            <bullet>
-              <split_impulse>1</split_impulse>
-              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
-              <soft_cfm>0</soft_cfm>
-              <soft_erp>0.2</soft_erp>
-              <kp>1e+13</kp>
-              <kd>1</kd>
-            </bullet>
-          </contact>
-        </surface>
-      </collision>
+        </visual>
+        <collision name='right_propeller_link_fixed_joint_lump__right_propeller_collision_collision'>
+            <laser_retro>0</laser_retro>
+            <max_contacts>10</max_contacts>
+            <pose>0 0 0 0 0 0</pose>
+            <geometry>
+              <cylinder>
+                <radius>0.24</radius>
+                <length>0.18</length>
+              </cylinder>
+            </geometry>
+            <surface>
+              <friction>
+                <ode>
+                  <mu>1</mu>
+                  <mu2>1</mu2>
+                  <fdir1>0 0 0</fdir1>
+                  <slip1>0</slip1>
+                  <slip2>0</slip2>
+                </ode>
+                <torsional>
+                  <coefficient>1</coefficient>
+                  <patch_radius>0</patch_radius>
+                  <surface_radius>0</surface_radius>
+                  <use_patch_radius>1</use_patch_radius>
+                  <ode>
+                    <slip>0</slip>
+                  </ode>
+                </torsional>
+              </friction>
+              <bounce>
+                <restitution_coefficient>0</restitution_coefficient>
+                <threshold>1e+06</threshold>
+              </bounce>
+              <contact>
+                <collide_without_contact>0</collide_without_contact>
+                <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+                <collide_bitmask>1</collide_bitmask>
+                <ode>
+                  <soft_cfm>0</soft_cfm>
+                  <soft_erp>0.2</soft_erp>
+                  <kp>1e+13</kp>
+                  <kd>1</kd>
+                  <max_vel>0.01</max_vel>
+                  <min_depth>0</min_depth>
+                </ode>
+                <bullet>
+                  <split_impulse>1</split_impulse>
+                  <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+                  <soft_cfm>0</soft_cfm>
+                  <soft_erp>0.2</soft_erp>
+                  <kp>1e+13</kp>
+                  <kd>1</kd>
+                </bullet>
+              </contact>
+            </surface>
+        </collision>
     </link>
 		
 	<joint name='left_engine_propeller_joint' type='revolute'>
@@ -809,7 +809,7 @@
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>20</maxRotVelocity>
+      <maxRotVelocity>25</maxRotVelocity>
       <motorConstant>8.54858e-02</motorConstant>
       <momentConstant>0.01</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
@@ -827,7 +827,7 @@
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>20</maxRotVelocity>
+      <maxRotVelocity>25</maxRotVelocity>
       <motorConstant>8.54858e-02</motorConstant>
       <momentConstant>0.01</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
