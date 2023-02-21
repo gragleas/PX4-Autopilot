@@ -70,6 +70,7 @@ px4_add_romfs_files(
 	3011_jsbsim_hexarotor_x
 
 	1070_gz_boat
+	1071_gz_aux_boat
 	4001_gz_x500
 	4002_gz_x500_depth
 	4003_gz_rc_cessna
