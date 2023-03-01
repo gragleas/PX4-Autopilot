@@ -124,9 +124,9 @@
 		      <algorithm>fft</algorithm>
 		      <tile_size>64</tile_size>
 		      <cell_count>64</cell_count>
-		      <wind_speed>2.0</wind_speed>
-		      <wind_angle_deg>135</wind_angle_deg>
-		      <steepness>2.0</steepness>
+		      <wind_speed>0.0</wind_speed>
+	          <wind_angle_deg>0</wind_angle_deg>
+	          <steepness>0.0</steepness>
 		    </wave>
 		  </plugin>
 
@@ -169,9 +169,9 @@
 		          <algorithm>fft</algorithm>
 		          <tile_size>64</tile_size>
 		          <cell_count>64</cell_count>
-		          <wind_speed>2.0</wind_speed>
-		          <wind_angle_deg>135</wind_angle_deg>
-		          <steepness>2.0</steepness>
+		          <wind_speed>0.0</wind_speed>
+		          <wind_angle_deg>0</wind_angle_deg>
+		          <steepness>0.0</steepness>
 		        </wave>
 
 		        <!--
