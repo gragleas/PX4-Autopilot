@@ -621,15 +621,15 @@
 		
 	<plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
       <a0>0</a0>
-      <cla>0.0</cla>
-      <cda>8.0</cda>
+      <cla>1.0</cla>
+      <cda>0</cda>
       <cma>0</cma>
       <alpha_stall>0.471239</alpha_stall>
-      <cla_stall>0.0</cla_stall>
-      <cda_stall>8.0</cda_stall>
+      <cla_stall>0.5</cla_stall>
+      <cda_stall>0.5</cda_stall>
       <cma_stall>0</cma_stall>
       <cp>0.5 0.02 0.12</cp>
-      <area>7.5</area>
+      <area>3.5</area>
       <air_density>997</air_density>
       <forward>-1 0 0</forward>
       <upward>0 1 0</upward>
@@ -652,15 +652,15 @@
     
     <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
       <a0>0</a0>
-      <cla>0.0</cla>
-      <cda>8.0</cda>
+      <cla>1</cla>
+      <cda>0</cda>
       <cma>0</cma>
       <alpha_stall>0.471239</alpha_stall>
-      <cla_stall>0.0</cla_stall>
-      <cda_stall>8.0</cda_stall>
+      <cla_stall>0.5</cla_stall>
+      <cda_stall>0.5</cda_stall>
       <cma_stall>0</cma_stall>
       <cp>0.5 0.02 0.12</cp>
-      <area>7.5</area>
+      <area>3.5</area>
       <air_density>997</air_density>
       <forward>-1 0 0</forward>
       <upward>0 1 0</upward>
@@ -783,19 +783,27 @@
       <pose>0.305 0 0 0 -0 0</pose>
       <axis>
         <xyz>0 1 0</xyz>
+        <limit>
+            <effort>1</effort>
+            <velocity>1</velocity>
+        </limit>
         <dynamics>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
       </axis>
     </joint>
-    
+
     <joint name='base_link_wing_2' type='revolute'>
       <parent>base_link</parent>
       <child>wing_2</child>
       <pose>0.305 0 0 0 -0 0</pose>
       <axis>
         <xyz>0 1 0</xyz>
+        <limit>
+            <effort>1</effort>
+            <velocity>1</velocity>
+        </limit>
         <dynamics>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
@@ -809,7 +817,7 @@
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>20</maxRotVelocity>
+      <maxRotVelocity>25</maxRotVelocity>
       <motorConstant>8.54858e-02</motorConstant>
       <momentConstant>0.01</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
@@ -818,7 +826,6 @@
       <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
       <rotorVelocitySlowdownSim>20</rotorVelocitySlowdownSim>
       <motorType>velocity</motorType>
-      <robotNamespace></robotNamespace>
     </plugin>
     
     <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
@@ -827,7 +834,7 @@
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>20</maxRotVelocity>
+      <maxRotVelocity>25</maxRotVelocity>
       <motorConstant>8.54858e-02</motorConstant>
       <momentConstant>0.01</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
@@ -836,7 +843,6 @@
       <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
       <rotorVelocitySlowdownSim>20</rotorVelocitySlowdownSim>
       <motorType>velocity</motorType>
-      <robotNamespace></robotNamespace>
     </plugin>
     
     <!-- Hydrodynamics plugin -->
