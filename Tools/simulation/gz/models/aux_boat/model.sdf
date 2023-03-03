@@ -851,8 +851,8 @@
 	    name="gz::sim::systems::Hydrodynamics">
 	    
 	    <enable>aux_boat_0::base_link</enable>
-	    <!-- <enable>boat_0::rudder_1</enable>
-	    <enable>boat_0::rudder_2</enable> -->
+	    <enable>boat_0::rudder_1</enable>
+	    <enable>boat_0::rudder_2</enable>
 
 	    <hydrodynamics>
 	      <damping_on>1</damping_on>
