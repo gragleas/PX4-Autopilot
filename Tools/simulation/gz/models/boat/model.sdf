@@ -445,20 +445,20 @@
       <control_joint_rad_to_cl>-1.0</control_joint_rad_to_cl>
     </plugin>
 		
-		<plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
-      <a0>0.191986</a0>
-      <cla>0.1</cla>
-      <cda>0.2</cda>
+	<plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
+      <a0>0</a0>
+      <cla>1.0</cla>
+      <cda>0</cda>
       <cma>0</cma>
       <alpha_stall>0.471239</alpha_stall>
-      <cla_stall>-0.666666</cla_stall>
-      <cda_stall>0.00275</cda_stall>
+      <cla_stall>0.5</cla_stall>
+      <cda_stall>0.5</cda_stall>
       <cma_stall>0</cma_stall>
       <cp>0.5 0.02 0.12</cp>
-      <area>0.354</area>
+      <area>3.5</area>
       <air_density>997</air_density>
-      <forward>0 0 -1</forward>
-      <upward>1 0 0</upward>
+      <forward>-1 0 0</forward>
+      <upward>0 1 0</upward>
       <link_name>rudder_1</link_name>
       <control_joint_name>servo_0</control_joint_name>
       <control_joint_rad_to_cl>-0.3</control_joint_rad_to_cl>
@@ -477,19 +477,19 @@
     
     
     <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
-      <a0>0.191986</a0>
-      <cla>0.1</cla>
-      <cda>0.2</cda>
+      <a0>0</a0>
+      <cla>1</cla>
+      <cda>0</cda>
       <cma>0</cma>
       <alpha_stall>0.471239</alpha_stall>
-      <cla_stall>-0.666666</cla_stall>
-      <cda_stall>0.00275</cda_stall>
+      <cla_stall>0.5</cla_stall>
+      <cda_stall>0.5</cda_stall>
       <cma_stall>0</cma_stall>
       <cp>0.5 0.02 0.12</cp>
-      <area>0.354</area>
+      <area>3.5</area>
       <air_density>997</air_density>
-      <forward>0 0 -1</forward>
-      <upward>1 0 0</upward>
+      <forward>-1 0 0</forward>
+      <upward>0 1 0</upward>
       <link_name>rudder_2</link_name>
       <control_joint_name>servo_1</control_joint_name>
       <control_joint_rad_to_cl>-0.3</control_joint_rad_to_cl>
@@ -669,9 +669,8 @@
 		    name="gz::sim::systems::Hydrodynamics">
 		    
 		    <enable>boat_0::base_link</enable>
-		    <!-- <enable>boat_0::rudder_1</enable>
-		    <enable>boat_0::rudder_2</enable> -->
-
+		    <enable>boat_0::rudder_1</enable>
+		    <enable>boat_0::rudder_2</enable>
 		    <hydrodynamics>
 		      <damping_on>1</damping_on>
 		      <viscous_drag_on>1</viscous_drag_on>
