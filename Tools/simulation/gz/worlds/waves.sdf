@@ -78,7 +78,7 @@
       </graded_buoyancy>
 
       <!-- enable by link name -->
-      <enable>boat::base_link</enable>
+      <enable>boat_0::base_link</enable>
     </plugin>
     
     
@@ -99,9 +99,9 @@
 		    <wave>
 		      <!-- `fft` wave parameters -->
 		      <algorithm>fft</algorithm>
-		      <tile_size>256</tile_size>
-		      <cell_count>256</cell_count>
-		      <wind_speed>5.0</wind_speed>
+		      <tile_size>64</tile_size>
+		      <cell_count>64</cell_count>
+		      <wind_speed>1.0</wind_speed>
 		      <wind_angle_deg>135</wind_angle_deg>
 		      <steepness>2</steepness>
 		    </wave>
@@ -144,9 +144,9 @@
 		        <wave>
 		          <!-- `fft` wave parameters -->
 		          <algorithm>fft</algorithm>
-		          <tile_size>256</tile_size>
-		          <cell_count>256</cell_count>
-		          <wind_speed>5.0</wind_speed>
+		          <tile_size>64</tile_size>
+		          <cell_count>64</cell_count>
+		          <wind_speed>1.0</wind_speed>
 		          <wind_angle_deg>135</wind_angle_deg>
 		          <steepness>2</steepness>
 		        </wave>
@@ -240,24 +240,6 @@
 		        </param>
 		      </plugin>
 		    </visual>
-		    <visual name="visual_abcedf">
-		    	<pose>-10 0 -10 0 0 0</pose>
-		      <geometry>
-		        <mesh>
-		        	<uri>/home/graham/Downloads/meshes/heightmap2.dae</uri>
-		        	<scale>100 100 100</scale>
-		        </mesh>
-		      </geometry>
-      	</visual>
-      	<collision name="collision_abcedf">
-		    	<pose>-10 0 -10 0 0 0</pose>
-		      <geometry>
-		        <mesh>
-		        	<uri>/home/graham/Downloads/meshes/heightmap2.dae</uri>
-		        	<scale>100 100 100</scale>
-		        </mesh>
-		      </geometry>
-      	</collision>
 		  </link>
 		</model>
 		

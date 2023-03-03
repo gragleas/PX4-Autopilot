@@ -22,6 +22,7 @@ param set-default SENS_BOARD_ROT 4
 param set-default CA_ROTOR_COUNT 2
 
 param set-default CA_SV_CS_COUNT 2
+
 param set-default CA_SV_CS0_TRQ_R 10
 param set-default CA_SV_CS0_TYPE 12
 param set-default CA_SV_CS1_TRQ_R 10

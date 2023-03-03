@@ -6,12 +6,12 @@
       <real_time_factor>1.0</real_time_factor>
       <real_time_update_rate>250</real_time_update_rate>
     </physics>
-    <plugin name='ignition::gazebo::systems::Physics' filename='ignition-gazebo-physics-system'/>
-    <plugin name='ignition::gazebo::systems::UserCommands' filename='ignition-gazebo-user-commands-system'/>
-    <plugin name='ignition::gazebo::systems::SceneBroadcaster' filename='ignition-gazebo-scene-broadcaster-system'/>
-    <plugin name='ignition::gazebo::systems::Imu' filename='ignition-gazebo-imu-system'/>
-    <plugin name='ignition::gazebo::systems::Sensors' filename='ignition-gazebo-sensors-system'/>
-    <plugin name='ignition::gazebo::systems::Contact' filename='ignition-gazebo-contact-system'/>
+    <plugin name='gz::sim::systems::Physics' filename='gz-sim-physics-system'/>
+    <plugin name='gz::sim::systems::UserCommands' filename='gz-sim-user-commands-system'/>
+    <plugin name='gz::sim::systems::SceneBroadcaster' filename='gz-sim-scene-broadcaster-system'/>
+    <plugin name='gz::sim::systems::Imu' filename='gz-sim-imu-system'/>
+    <plugin name='gz::sim::systems::Sensors' filename='gz-sim-sensors-system'/>
+    <plugin name='gz::sim::systems::Contact' filename='gz-sim-contact-system'/>
 
     <gui fullscreen='false'>
       <plugin name='3D View' filename='GzScene3D'>
@@ -65,22 +65,6 @@
       </plugin>
       <plugin name='Entity tree' filename='EntityTree'/>
     </gui>
-    
-    
-    <plugin
-      filename="gz-sim-buoyancy-system"
-      name="gz::sim::systems::Buoyancy">
-      <graded_buoyancy>
-        <default_density>1000</default_density>
-        <density_change>
-          <above_depth>0</above_depth>
-          <density>1</density>
-        </density_change>
-      </graded_buoyancy>
-
-      <!-- enable by link name -->
-      <enable>boat_0::base_link</enable>
-    </plugin>
     
     <plugin
       filename="gz-sim-wind-effects-system"
@@ -140,9 +124,9 @@
 		      <algorithm>fft</algorithm>
 		      <tile_size>64</tile_size>
 		      <cell_count>64</cell_count>
-		      <wind_speed>2.0</wind_speed>
-		      <wind_angle_deg>135</wind_angle_deg>
-		      <steepness>2</steepness>
+		      <wind_speed>0.0</wind_speed>
+	          <wind_angle_deg>0</wind_angle_deg>
+	          <steepness>0.0</steepness>
 		    </wave>
 		  </plugin>
 
@@ -185,9 +169,9 @@
 		          <algorithm>fft</algorithm>
 		          <tile_size>64</tile_size>
 		          <cell_count>64</cell_count>
-		          <wind_speed>2.0</wind_speed>
-		          <wind_angle_deg>135</wind_angle_deg>
-		          <steepness>2</steepness>
+		          <wind_speed>0.0</wind_speed>
+		          <wind_angle_deg>0</wind_angle_deg>
+		          <steepness>0.0</steepness>
 		        </wave>
 
 		        <!--
@@ -279,24 +263,6 @@
 		        </param>
 		      </plugin>
 		    </visual>
-				<visual name="visual_abcedf">
-		    	<pose>-10 0 -10 0 0 0</pose>
-		      <geometry>
-		        <mesh>
-		        	<uri>/home/graham/Downloads/meshes/heightmap2.dae</uri>
-		        	<scale>100 100 100</scale>
-		        </mesh>
-		      </geometry>
-      	</visual>
-      	<collision name="collision_abcedf">
-		    	<pose>-10 0 -10 0 0 0</pose>
-		      <geometry>
-		        <mesh>
-		        	<uri>/home/graham/Downloads/meshes/heightmap2.dae</uri>
-		        	<scale>100 100 100</scale>
-		        </mesh>
-		      </geometry>
-      	</collision>
 		  </link>
 		</model>
 		
