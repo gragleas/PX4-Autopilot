@@ -407,7 +407,7 @@
       </axis>
     </joint>
     
-    <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
+    <!-- plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
       <a0>0</a0>
       <cla>0.1</cla>
       <cda>0</cda>
@@ -424,9 +424,29 @@
       <link_name>wing_1</link_name>
       <control_joint_name>base_link_wing_1</control_joint_name>
       <control_joint_rad_to_cl>-1.0</control_joint_rad_to_cl>
+    </plugin> -->
+    
+    <plugin name="gz::sim::systems::SailLiftDrag"
+        filename="asv_sim2-sail-lift-drag-system">
+      <a0>0.0</a0>
+      <cla>5.160550459</cla>
+      <alpha_stall>1.0e+308</alpha_stall>
+      <cla_stall>5.160550459</cla_stall>
+      <!-- <cda>0.63662</cda> -->
+      <cda>0.3</cda>
+      <cda_stall>0.3</cda_stall>
+      <area>0.5</area>
+      <fluid_density>1.2</fluid_density>
+      <forward>-1 0 0</forward>
+      <upward>0 1 0</upward>
+      <cp>2.1 2.51 4.3</cp>
+      <link_name>wing_1</link_name>
+      <radial_symmetry>true</radial_symmetry>
+      <topic>lift_drag</topic>
     </plugin>
     
-    <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
+    
+    <!-- plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
       <a0>0</a0>
       <cla>0.1</cla>
       <cda>0</cda>
@@ -443,16 +463,34 @@
       <link_name>wing_2</link_name>
       <control_joint_name>base_link_wing_2</control_joint_name>
       <control_joint_rad_to_cl>-1.0</control_joint_rad_to_cl>
-    </plugin>
+    </plugin> -->
+    
+    <!--plugin name="gz::sim::systems::SailLiftDrag"
+        filename="asv_sim2-sail-lift-drag-system">
+      <a0>0.0</a0>
+      <cla>5.160550459</cla>
+      <alpha_stall>1.0e+308</alpha_stall>
+      <cla_stall>5.160550459</cla_stall>
+      <cda>0.3</cda>
+      <cda_stall>0.3</cda_stall>
+      <area>0.5</area>
+      <fluid_density>1.2</fluid_density>
+      <forward>-1 0 0</forward>
+      <upward>0 1 0</upward>
+      <cp>4.1 2.51 4.3</cp>
+      <link_name>wing_2</link_name>
+      <radial_symmetry>true</radial_symmetry>
+      <topic>lift_drag</topic>
+    </plugin-->
 		
 	<plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
       <a0>0</a0>
-      <cla>1.0</cla>
-      <cda>0</cda>
-      <cma>0</cma>
-      <alpha_stall>0.471239</alpha_stall>
-      <cla_stall>0.5</cla_stall>
-      <cda_stall>0.5</cda_stall>
+      <cla>10</cla>
+      <cda>10</cda>
+      <cma>0.0</cma>
+      <alpha_stall>0.5</alpha_stall>
+      <cla_stall>-10</cla_stall>
+      <cda_stall>10</cda_stall>
       <cma_stall>0</cma_stall>
       <cp>0.5 0.02 0.12</cp>
       <area>3.5</area>
@@ -461,7 +499,6 @@
       <upward>0 1 0</upward>
       <link_name>rudder_1</link_name>
       <control_joint_name>servo_0</control_joint_name>
-      <control_joint_rad_to_cl>-0.3</control_joint_rad_to_cl>
     </plugin>
     <plugin
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
@@ -478,12 +515,12 @@
     
     <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
       <a0>0</a0>
-      <cla>1</cla>
-      <cda>0</cda>
-      <cma>0</cma>
-      <alpha_stall>0.471239</alpha_stall>
-      <cla_stall>0.5</cla_stall>
-      <cda_stall>0.5</cda_stall>
+      <cla>10</cla>
+      <cda>10</cda>
+      <cma>0.0</cma>
+      <alpha_stall>0.5</alpha_stall>
+      <cla_stall>-10</cla_stall>
+      <cda_stall>10</cda_stall>
       <cma_stall>0</cma_stall>
       <cp>0.5 0.02 0.12</cp>
       <area>3.5</area>
@@ -492,7 +529,6 @@
       <upward>0 1 0</upward>
       <link_name>rudder_2</link_name>
       <control_joint_name>servo_1</control_joint_name>
-      <control_joint_rad_to_cl>-0.3</control_joint_rad_to_cl>
     </plugin>
     <plugin
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
@@ -669,8 +705,8 @@
 		    name="gz::sim::systems::Hydrodynamics">
 		    
 		    <enable>boat_0::base_link</enable>
-		    <enable>boat_0::rudder_1</enable>
-		    <enable>boat_0::rudder_2</enable>
+		    <!--enable>boat_0::port_hull</enable>
+		    <enable>boat_0::starboard_hull</enable-->
 		    <hydrodynamics>
 		      <damping_on>1</damping_on>
 		      <viscous_drag_on>1</viscous_drag_on>
@@ -685,10 +721,10 @@
 		      <!-- 'Pressure' Drag -->
 		      <cPDrag1>1.0E+2</cPDrag1>
 		      <cPDrag2>1.0E+2</cPDrag2>
-		      <fPDrag>0.4</fPDrag>
+		      <fPDrag>0.04</fPDrag>
 		      <cSDrag1>1.0E+2</cSDrag1>
 		      <cSDrag2>1.0E+2</cSDrag2>
-		      <fSDrag>0.4</fSDrag>
+		      <fSDrag>0.04</fSDrag>
 		      <vRDrag>1.0</vRDrag>
 		    </hydrodynamics>
 		</plugin>
