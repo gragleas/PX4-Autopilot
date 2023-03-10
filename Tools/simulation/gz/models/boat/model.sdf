@@ -495,7 +495,7 @@
     </plugin>
     
     <link name='wing_1'>
-      <pose>2.47482 2.49991 0.615342 1.57 0 1.57</pose>
+      <pose>2.47482 1.25 0.615342 1.57 0 1.57</pose>
       <inertial>
         <pose>.4 3.25 0 0 -0 0</pose>
         <mass>20</mass>
@@ -543,7 +543,7 @@
     </link>
     
     <link name='wing_2'>
-      <pose>4.51199 2.49807 0.615342 1.57 0 1.57</pose>
+      <pose>4.51199 1.25 0.615342 1.57 0 1.57</pose>
       <inertial>
         <pose>.4 3.25 0 0 -0 0</pose>
         <mass>20</mass>
