@@ -71,6 +71,43 @@
         <pose>2.5 1.6 0.6 0 0 3.14</pose>
         <update_rate>250</update_rate>
       </sensor>
+      <sensor name="navsat_sensor" type="navsat">
+            <always_on>1</always_on>
+            <update_rate>10</update_rate>
+            <navsat>
+             <velocity_sensing>
+               <horizontal>
+                 <noise type="gaussian">
+                     <mean>0.0</mean>
+                     <stddev>0.06</stddev>
+                 </noise>
+               </horizontal>
+               <vertical>
+                 <noise type="gaussian">
+                     <mean>0.0</mean>
+                     <stddev>0.158</stddev>
+                 </noise>
+               </vertical>
+             </velocity_sensing>
+            </navsat>
+        </sensor>
+        <sensor name="magnetometer_sensor" type="magnetometer">
+            <always_on>1</always_on>
+            <update_rate>10</update_rate>
+        </sensor>
+        <sensor name="air_speed" type="air_speed">
+        <always_on>1</always_on>
+            <update_rate>5.0</update_rate>
+            <enable_metrics>false</enable_metrics>
+            <air_speed>
+              <airspeed>
+                <noise type="gaussian">
+                  <mean>0</mean>
+                  <stddev>0.01</stddev>
+                </noise>
+              </airspeed>
+            </air_speed>
+        </sensor>
     </link>
     <link name="ballast_tank">
     	<pose>1.45 0.4 1.07 0 .05 0</pose>
@@ -107,51 +144,6 @@
       <parent>base_link</parent>
     </joint>
     
-    <link name="airspeed">
-      <pose>2.5 1.6 0.6 0 0 3.14</pose>
-      <inertial>
-        <pose>0 0 0 0 0 0</pose>
-        <mass>0.015</mass>
-        <inertia>
-          <ixx>1e-05</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>1e-05</iyy>
-          <iyz>0</iyz>
-          <izz>1e-05</izz>
-        </inertia>
-      </inertial>
-      <visual name="visual">
-        <geometry>
-          <cylinder>
-            <radius>0.01</radius>
-            <length>0.1</length>
-          </cylinder>
-        </geometry>
-        <material>
-          <ambient>0 0 0 1.0</ambient>
-          <diffuse>0 0 0 1.0</diffuse>
-        </material>
-      </visual>
-      <!-- <sensor name="air_speed" type="air_speed">
-        <always_on>1</always_on>
-        <update_rate>5.0</update_rate>
-        <enable_metrics>false</enable_metrics>
-        <air_speed>
-          <airspeed>
-            <noise type="gaussian">
-              <mean>0</mean>
-              <stddev>0.01</stddev>
-            </noise>
-          </airspeed>
-        </air_speed>
-      </sensor> -->
-    </link>
-    <joint name='airspeed_joint' type='fixed'>
-      <child>airspeed</child>
-      <parent>base_link</parent>
-    </joint>
-    
     <link name="port_hull">
         <inertial>
             <pose>2.551 2.5 0.6 1.57 -0 0</pose>
@@ -164,7 +156,15 @@
               <iyz>0</iyz>
               <izz>63.146</izz>
             </inertia>
+            <fluid_added_mass>
+                <xx>287.115388599</xx>
+                <yy>1096.25875647</yy>
+                <zz>1096.25875647</zz>
+                <qq>1569.999147659</qq>
+                <rr>1569.999147659</rr>
+            </fluid_added_mass>
         </inertial>
+        
         <visual name='port_hull_visual'>
         <pose>0.012 0.235 0.25 1.57 -0 0</pose>
         <geometry>
@@ -220,6 +220,13 @@
           <iyz>0</iyz>
           <izz>63.146</izz>
         </inertia>
+        <fluid_added_mass>
+                <xx>287.115388599</xx>
+                <yy>1096.25875647</yy>
+                <zz>1096.25875647</zz>
+                <qq>1569.999147659</qq>
+                <rr>1569.999147659</rr>
+            </fluid_added_mass>
       </inertial>
       <visual name='starboard_hull_visual'>
         <pose>-0.002 2.473 0.3 1.57 -0 0</pose>
@@ -375,7 +382,7 @@
     </joint>
     
     <link name='left_propeller_link'>
-      <pose>4.34739 0.996639 0.009682 3.1344 1.57079 -9.8e-05</pose>
+      <pose>4.34739 1.135 0.45 3.1344 1.57079 -9.8e-05</pose>
       <inertial>
         <pose>0 0 0 0 -0 0</pose>
         <mass>0.5</mass>
@@ -466,7 +473,8 @@
     </link>
     
     <link name='right_propeller_link'>
-      <pose>4.34739 1.93559 0.009682 3.1344 1.57079 -9.8e-05</pose>
+      <pose>4.34739 1.85 0.45 3.1344 1.57079 -9.8e-05</pose>
+      <!-- pose>4.376 1.135 0.65 1.57 -0 3.14</pose-->
       <inertial>
         <pose>0 0 0 0 -0 0</pose>
         <mass>0.5</mass>
@@ -621,12 +629,12 @@
 		
 	<plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
       <a0>0</a0>
-      <cla>1.0</cla>
-      <cda>0</cda>
-      <cma>0</cma>
-      <alpha_stall>0.471239</alpha_stall>
-      <cla_stall>0.5</cla_stall>
-      <cda_stall>0.5</cda_stall>
+      <cla>10</cla>
+      <cda>10</cda>
+      <cma>0.0</cma>
+      <alpha_stall>0.5</alpha_stall>
+      <cla_stall>-10</cla_stall>
+      <cda_stall>10</cda_stall>
       <cma_stall>0</cma_stall>
       <cp>0.5 0.02 0.12</cp>
       <area>3.5</area>
@@ -635,7 +643,6 @@
       <upward>0 1 0</upward>
       <link_name>rudder_1</link_name>
       <control_joint_name>servo_0</control_joint_name>
-      <control_joint_rad_to_cl>-0.3</control_joint_rad_to_cl>
     </plugin>
     <plugin
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
@@ -652,12 +659,12 @@
     
     <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
       <a0>0</a0>
-      <cla>1</cla>
-      <cda>0</cda>
-      <cma>0</cma>
-      <alpha_stall>0.471239</alpha_stall>
-      <cla_stall>0.5</cla_stall>
-      <cda_stall>0.5</cda_stall>
+      <cla>10</cla>
+      <cda>10</cda>
+      <cma>0.0</cma>
+      <alpha_stall>0.5</alpha_stall>
+      <cla_stall>-10</cla_stall>
+      <cda_stall>10</cda_stall>
       <cma_stall>0</cma_stall>
       <cp>0.5 0.02 0.12</cp>
       <area>3.5</area>
@@ -666,7 +673,6 @@
       <upward>0 1 0</upward>
       <link_name>rudder_2</link_name>
       <control_joint_name>servo_1</control_joint_name>
-      <control_joint_rad_to_cl>-0.3</control_joint_rad_to_cl>
     </plugin>
     <plugin
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
@@ -817,7 +823,7 @@
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>25</maxRotVelocity>
+      <maxRotVelocity>26</maxRotVelocity>
       <motorConstant>8.54858e-02</motorConstant>
       <momentConstant>0.01</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
@@ -834,7 +840,7 @@
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>25</maxRotVelocity>
+      <maxRotVelocity>26</maxRotVelocity>
       <motorConstant>8.54858e-02</motorConstant>
       <momentConstant>0.01</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
@@ -851,8 +857,8 @@
 	    name="gz::sim::systems::Hydrodynamics">
 	    
 	    <enable>aux_boat_0::base_link</enable>
-	    <enable>boat_0::rudder_1</enable>
-	    <enable>boat_0::rudder_2</enable>
+	    <!-- <enable>aux_boat_0::rudder_1</enable>
+	    <enable>aux_boat_0::rudder_2</enable> -->
 
 	    <hydrodynamics>
 	      <damping_on>1</damping_on>

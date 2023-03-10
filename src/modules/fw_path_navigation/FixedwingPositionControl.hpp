@@ -33,11 +33,11 @@
 
 
 /**
- * @file fw_pos_control_l1_main.hpp
- * Implementation of a generic position controller based on the L1 norm. Outputs a bank / roll
+ * @file fw_path_navigation_main.hpp
+ * Implementation of a generic path navigation. Outputs a bank / roll
  * angle, equivalent to a lateral motion (for copters and rovers).
  *
- * The implementation for the controllers is in the ECL library. This class only
+ * The implementation for the controllers is in a separate library. This class only
  * interfaces to the library.
  *
  * @author Lorenz Meier <lorenz@px4.io>
@@ -55,7 +55,6 @@
 
 #include <drivers/drv_hrt.h>
 #include <lib/geo/geo.h>
-#include <lib/l1/ECL_L1_Pos_Controller.hpp>
 #include <lib/npfg/npfg.hpp>
 #include <lib/tecs/TECS.hpp>
 #include <lib/mathlib/mathlib.h>
@@ -157,10 +156,6 @@ static constexpr float MIN_PITCH_DURING_MANUAL_TAKEOFF = 0.0f;
 // altitude while waiting for navigator to flag it exceeded
 static constexpr float kClearanceAltitudeBuffer = 10.0f;
 
-// [m] a very large number to hopefully avoid the "fly back" case in L1 waypoint following logic once passed the second
-// waypoint in the segment. this is unecessary with NPFG.
-static constexpr float L1_VIRTUAL_TAKEOFF_WP_DIST = 1.0e6f;
-
 // [m/s] maximum rate at which the touchdown position can be nudged
 static constexpr float MAX_TOUCHDOWN_POSITION_NUDGE_RATE = 4.0f;
 
@@ -241,7 +236,8 @@ private:
 		FW_POSCTRL_MODE_AUTO_ALTITUDE,
 		FW_POSCTRL_MODE_AUTO_CLIMBRATE,
 		FW_POSCTRL_MODE_AUTO_TAKEOFF,
-		FW_POSCTRL_MODE_AUTO_LANDING,
+		FW_POSCTRL_MODE_AUTO_LANDING_STRAIGHT,
+		FW_POSCTRL_MODE_AUTO_LANDING_CIRCULAR,
 		FW_POSCTRL_MODE_MANUAL_POSITION,
 		FW_POSCTRL_MODE_MANUAL_ALTITUDE,
 		FW_POSCTRL_MODE_OTHER
@@ -412,8 +408,8 @@ private:
 
 	// LATERAL-DIRECTIONAL GUIDANCE
 
-	// L1 guidance - lateral-directional position control
-	ECL_L1_Pos_Controller _l1_control;
+	// CLosest point on path to track
+	matrix::Vector2f _closest_point_on_path;
 
 	// nonlinear path following guidance - lateral-directional position control
 	NPFG _npfg;
@@ -601,7 +597,9 @@ private:
 				  const Vector2f &ground_speed, const position_setpoint_s &pos_sp_curr);
 
 	/**
-	 * @brief Controls automatic landing.
+	 * @brief Controls automatic landing with straight approach.
+	 *
+	 * To be used in Missions that contain a loiter down followed by a land waypoint.
 	 *
 	 * @param now Current system time [us]
 	 * @param control_interval Time since last position control call [s]
@@ -610,8 +608,22 @@ private:
 	 * @param pos_sp_prev previous position setpoint
 	 * @param pos_sp_curr current position setpoint
 	 */
-	void control_auto_landing(const hrt_abstime &now, const float control_interval, const Vector2f &ground_speed,
-				  const position_setpoint_s &pos_sp_prev, const position_setpoint_s &pos_sp_curr);
+	void control_auto_landing_straight(const hrt_abstime &now, const float control_interval, const Vector2f &ground_speed,
+					   const position_setpoint_s &pos_sp_prev, const position_setpoint_s &pos_sp_curr);
+
+	/**
+	 * @brief Controls automatic landing with circular final appraoch.
+	 *
+	 * To be used outside of Mission landings. Vehicle will orbit down around the landing position setpoint until flaring.
+	 *
+	 * @param now Current system time [us]
+	 * @param control_interval Time since last position control call [s]
+	 * @param control_interval Time since the last position control update [s]
+	 * @param ground_speed Local 2D ground speed of vehicle [m/s]
+	 * @param pos_sp_curr current position setpoint
+	 */
+	void control_auto_landing_circular(const hrt_abstime &now, const float control_interval, const Vector2f &ground_speed,
+					   const position_setpoint_s &pos_sp_curr);
 
 	/* manual control methods */
 
@@ -655,19 +667,6 @@ private:
 	void reset_takeoff_state();
 	void reset_landing_state();
 
-	bool using_npfg_with_wind_estimate() const;
-
-	/**
-	 * @brief Returns the velocity vector to be input in the lateral-directional guidance laws.
-	 *
-	 * Replaces the ground velocity vector with an air velocity vector depending on the wind condition and whether
-	 * NPFG or L1 are being used for horizontal position control.
-	 *
-	 * @param ground_speed Vehicle ground velocity vector [m/s]
-	 * @return Velocity vector to control with lateral-directional guidance [m/s]
-	 */
-	Vector2f get_nav_speed_2d(const Vector2f &ground_speed);
-
 	/**
 	 * @brief Decides which control mode to execute.
 	 *
@@ -701,16 +700,14 @@ private:
 	 * @param pitch_max_rad Nominal pitch angle command maximum [rad]
 	 * @param throttle_min Minimum throttle command [0,1]
 	 * @param throttle_max Maximum throttle command [0,1]
-	 * @param climbout_mode True if TECS should engage climbout mode
-	 * @param climbout_pitch_min_rad Minimum pitch angle command in climbout mode [rad]
 	 * @param desired_max_sink_rate The desired max sink rate commandable when altitude errors are large [m/s]
 	 * @param desired_max_climb_rate The desired max climb rate commandable when altitude errors are large [m/s]
 	 * @param disable_underspeed_detection True if underspeed detection should be disabled
 	 * @param hgt_rate_sp Height rate setpoint [m/s]
 	 */
 	void tecs_update_pitch_throttle(const float control_interval, float alt_sp, float airspeed_sp, float pitch_min_rad,
-					float pitch_max_rad, float throttle_min, float throttle_max, bool climbout_mode,
-					float climbout_pitch_min_rad, const float desired_max_sink_rate, const float desired_max_climb_rate,
+					float pitch_max_rad, float throttle_min, float throttle_max,
+					const float desired_max_sink_rate, const float desired_max_climb_rate,
 					bool disable_underspeed_detection = false, float hgt_rate_sp = NAN);
 
 	/**
@@ -759,21 +756,86 @@ private:
 	 *
 	 * @param now Current system time [us]
 	 * @param land_point_altitude Altitude (AMSL) of the land point [m]
+	 * @param abort_on_terrain_measurement_timeout Abort if distance to ground estimation doesn't get valid when we expect it to
+	 * @param abort_on_terrain_timeout Abort if distance to ground estimation is invalid after being valid before
 	 * @return Terrain altitude (AMSL) [m]
 	 */
-	float getLandingTerrainAltitudeEstimate(const hrt_abstime &now, const float land_point_altitude);
+	float getLandingTerrainAltitudeEstimate(const hrt_abstime &now, const float land_point_altitude,
+						const bool abort_on_terrain_measurement_timeout, const bool abort_on_terrain_timeout);
 
 	/**
 	 * @brief Initializes landing states
 	 *
 	 * @param now Current system time [us]
 	 * @param pos_sp_prev Previous position setpoint
-	 * @param pos_sp_curr Current position setpoint
+	 * @param land_point_alt Landing point altitude setpoint AMSL [m]
 	 * @param local_position Local aircraft position (NE) [m]
 	 * @param local_land_point Local land point (NE) [m]
 	 */
 	void initializeAutoLanding(const hrt_abstime &now, const position_setpoint_s &pos_sp_prev,
-				   const position_setpoint_s &pos_sp_curr, const Vector2f &local_position, const Vector2f &local_land_point);
+				   const float land_point_alt, const Vector2f &local_position, const Vector2f &local_land_point);
+
+	/*
+	 * Waypoint handling logic following closely to the ECL_L1_Pos_Controller
+	 * method of the same name. Takes two waypoints and determines the relevant
+	 * parameters for evaluating the NPFG guidance law, then updates control setpoints.
+	 *
+	 * @param[in] waypoint_A Waypoint A (segment start) position in WGS84 coordinates
+	 *            (lat,lon) [deg]
+	 * @param[in] waypoint_B Waypoint B (segment end) position in WGS84 coordinates
+	 *            (lat,lon) [deg]
+	 * @param[in] vehicle_pos Vehicle position in WGS84 coordinates (lat,lon) [deg]
+	 * @param[in] ground_vel Vehicle ground velocity vector [m/s]
+	 * @param[in] wind_vel Wind velocity vector [m/s]
+	 */
+	void navigateWaypoints(const matrix::Vector2f &waypoint_A, const matrix::Vector2f &waypoint_B,
+			       const matrix::Vector2f &vehicle_pos, const matrix::Vector2f &ground_vel,
+			       const matrix::Vector2f &wind_vel);
+
+	/*
+	 * Loitering (unlimited) logic. Takes loiter center, radius, and direction and
+	 * determines the relevant parameters for evaluating the NPFG guidance law,
+	 * then updates control setpoints.
+	 *
+	 * @param[in] loiter_center The position of the center of the loiter circle [m]
+	 * @param[in] vehicle_pos Vehicle position in WGS84 coordinates (lat,lon) [deg]
+	 * @param[in] radius Loiter radius [m]
+	 * @param[in] loiter_direction_counter_clockwise Specifies loiter direction
+	 * @param[in] ground_vel Vehicle ground velocity vector [m/s]
+	 * @param[in] wind_vel Wind velocity vector [m/s]
+	 */
+	void navigateLoiter(const matrix::Vector2f &loiter_center, const matrix::Vector2f &vehicle_pos,
+			    float radius, bool loiter_direction_counter_clockwise, const matrix::Vector2f &ground_vel,
+			    const matrix::Vector2f &wind_vel);
+
+	/*
+	 * Path following logic. Takes poisiton, path tangent, curvature and
+	 * then updates control setpoints to follow a path setpoint.
+	 *
+	 * @param[in] vehicle_pos vehicle_pos Vehicle position in WGS84 coordinates (lat,lon) [deg]
+	 * @param[in] position_setpoint closest point on a path in WGS84 coordinates (lat,lon) [deg]
+	 * @param[in] tangent_setpoint unit tangent vector of the path [m]
+	 * @param[in] ground_vel Vehicle ground velocity vector [m/s]
+	 * @param[in] wind_vel Wind velocity vector [m/s]
+	 * @param[in] curvature of the path setpoint [1/m]
+	 */
+	void navigatePathTangent(const matrix::Vector2f &vehicle_pos, const matrix::Vector2f &position_setpoint,
+				 const matrix::Vector2f &tangent_setpoint,
+				 const matrix::Vector2f &ground_vel, const matrix::Vector2f &wind_vel, const float &curvature);
+
+	/*
+	 * Navigate on a fixed bearing.
+	 *
+	 * This only holds a certain (ground relative) direction and does not perform
+	 * cross track correction. Helpful for semi-autonomous modes. Similar to navigateHeading.
+	 *
+	 * @param[in] vehicle_pos vehicle_pos Vehicle position in WGS84 coordinates (lat,lon) [deg]
+	 * @param[in] bearing Bearing angle [rad]
+	 * @param[in] ground_vel Vehicle ground velocity vector [m/s]
+	 * @param[in] wind_vel Wind velocity vector [m/s]
+	 */
+	void navigateBearing(const matrix::Vector2f &vehicle_pos, float bearing, const matrix::Vector2f &ground_vel,
+			     const matrix::Vector2f &wind_vel);
 
 	DEFINE_PARAMETERS(
 
@@ -784,12 +846,9 @@ private:
 
 		(ParamFloat<px4::params::FW_GND_SPD_MIN>) _param_fw_gnd_spd_min,
 
-		(ParamFloat<px4::params::FW_L1_DAMPING>) _param_fw_l1_damping,
-		(ParamFloat<px4::params::FW_L1_PERIOD>) _param_fw_l1_period,
-		(ParamFloat<px4::params::FW_L1_R_SLEW_MAX>) _param_fw_l1_r_slew_max,
+		(ParamFloat<px4::params::FW_PN_R_SLEW_MAX>) _param_fw_pn_r_slew_max,
 		(ParamFloat<px4::params::FW_R_LIM>) _param_fw_r_lim,
 
-		(ParamBool<px4::params::FW_USE_NPFG>) _param_fw_use_npfg,
 		(ParamFloat<px4::params::NPFG_PERIOD>) _param_npfg_period,
 		(ParamFloat<px4::params::NPFG_DAMPING>) _param_npfg_damping,
 		(ParamBool<px4::params::NPFG_LB_PERIOD>) _param_npfg_en_period_lb,
@@ -863,7 +922,7 @@ private:
 		(ParamFloat<px4::params::FW_WING_SPAN>) _param_fw_wing_span,
 		(ParamFloat<px4::params::FW_WING_HEIGHT>) _param_fw_wing_height,
 
-		(ParamFloat<px4::params::RWTO_L1_PERIOD>) _param_rwto_l1_period,
+		(ParamFloat<px4::params::RWTO_NPFG_PERIOD>) _param_rwto_npfg_period,
 		(ParamBool<px4::params::RWTO_NUDGE>) _param_rwto_nudge,
 
 		(ParamFloat<px4::params::FW_LND_FL_TIME>) _param_fw_lnd_fl_time,

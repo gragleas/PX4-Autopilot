@@ -52,6 +52,8 @@ bool Ekf::init(uint64_t timestamp)
 
 void Ekf::reset()
 {
+	ECL_INFO("reset");
+
 	_state.vel.setZero();
 	_state.pos.setZero();
 	_state.delta_ang_bias.setZero();
@@ -81,6 +83,62 @@ void Ekf::reset()
 	resetGpsDriftCheckFilters();
 
 	_output_predictor.reset();
+
+	// Ekf private fields
+	_time_last_horizontal_aiding = 0;
+	_time_last_v_pos_aiding = 0;
+	_time_last_v_vel_aiding = 0;
+
+	_time_last_hor_pos_fuse = 0;
+	_time_last_hgt_fuse = 0;
+	_time_last_hor_vel_fuse = 0;
+	_time_last_ver_vel_fuse = 0;
+	_time_last_heading_fuse = 0;
+
+	_time_last_flow_terrain_fuse = 0;
+	_time_last_zero_velocity_fuse = 0;
+	_time_last_healthy_rng_data = 0;
+
+	_last_known_pos.setZero();
+
+	_time_acc_bias_check = 0;
+
+	_gps_checks_passed = false;
+
+	_gps_alt_ref = NAN;
+
+	_baro_counter = 0;
+	_mag_counter = 0;
+
+	_time_bad_vert_accel = 0;
+	_time_good_vert_accel = 0;
+	_clip_counter = 0;
+
+	resetEstimatorAidStatus(_aid_src_baro_hgt);
+	resetEstimatorAidStatus(_aid_src_rng_hgt);
+	resetEstimatorAidStatus(_aid_src_airspeed);
+	resetEstimatorAidStatus(_aid_src_sideslip);
+
+	resetEstimatorAidStatus(_aid_src_fake_pos);
+	resetEstimatorAidStatus(_aid_src_fake_hgt);
+
+	resetEstimatorAidStatus(_aid_src_ev_hgt);
+	resetEstimatorAidStatus(_aid_src_ev_pos);
+	resetEstimatorAidStatus(_aid_src_ev_vel);
+	resetEstimatorAidStatus(_aid_src_ev_yaw);
+
+	resetEstimatorAidStatus(_aid_src_gnss_hgt);
+	resetEstimatorAidStatus(_aid_src_gnss_pos);
+	resetEstimatorAidStatus(_aid_src_gnss_vel);
+	resetEstimatorAidStatus(_aid_src_gnss_yaw);
+
+	resetEstimatorAidStatus(_aid_src_mag_heading);
+	resetEstimatorAidStatus(_aid_src_mag);
+
+	resetEstimatorAidStatus(_aid_src_aux_vel);
+
+	resetEstimatorAidStatus(_aid_src_optical_flow);
+	resetEstimatorAidStatus(_aid_src_terrain_optical_flow);
 }
 
 bool Ekf::update()
@@ -140,68 +198,15 @@ bool Ekf::initialiseFilter()
 		_gyro_lpf.update(imu_init.delta_ang / imu_init.delta_ang_dt);
 	}
 
-	// Sum the magnetometer measurements
-	if (_mag_buffer) {
-		magSample mag_sample;
-
-		if (_mag_buffer->pop_first_older_than(_time_delayed_us, &mag_sample)) {
-			if (mag_sample.time_us != 0) {
-				if (_mag_counter == 0) {
-					_mag_lpf.reset(mag_sample.mag);
-
-				} else {
-					_mag_lpf.update(mag_sample.mag);
-				}
-
-				_mag_counter++;
-			}
-		}
-	}
-
 	if (!initialiseTilt()) {
 		return false;
-	}
-
-	// calculate the initial magnetic field and yaw alignment
-	// but do not mark the yaw alignement complete as it needs to be
-	// reset once the leveling phase is done
-	if (_params.mag_fusion_type <= MagFuseType::MAG_3D) {
-		if (_mag_counter > 1) {
-			// rotate the magnetometer measurements into earth frame using a zero yaw angle
-			// the angle of the projection onto the horizontal gives the yaw angle
-			const Vector3f mag_earth_pred = updateYawInRotMat(0.f, _R_to_earth) * _mag_lpf.getState();
-			float yaw_new = -atan2f(mag_earth_pred(1), mag_earth_pred(0)) + getMagDeclination();
-
-			// update the rotation matrix using the new yaw value
-			_R_to_earth = updateYawInRotMat(yaw_new, Dcmf(_state.quat_nominal));
-			_state.quat_nominal = _R_to_earth;
-
-			// set the earth magnetic field states using the updated rotation
-			_state.mag_I = _R_to_earth * _mag_lpf.getState();
-			_state.mag_B.zero();
-
-		} else {
-			// not enough mag samples accumulated
-			return false;
-		}
 	}
 
 	// initialise the state covariance matrix now we have starting values for all the states
 	initialiseCovariance();
 
-	// update the yaw angle variance using the variance of the measurement
-	if (_params.mag_fusion_type <= MagFuseType::MAG_3D) {
-		// using magnetic heading tuning parameter
-		increaseQuatYawErrVariance(sq(fmaxf(_params.mag_heading_noise, 1.0e-2f)));
-	}
-
 	// Initialise the terrain estimator
 	initHagl();
-
-	// reset the essential fusion timeout counters
-	_time_last_hgt_fuse = _time_delayed_us;
-	_time_last_hor_pos_fuse = _time_delayed_us;
-	_time_last_hor_vel_fuse = _time_delayed_us;
 
 	// reset the output predictor state history to match the EKF initial values
 	_output_predictor.alignOutputFilter(_state.quat_nominal, _state.vel, _state.pos);

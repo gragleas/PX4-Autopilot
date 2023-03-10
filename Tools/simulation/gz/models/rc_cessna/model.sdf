@@ -84,6 +84,18 @@
         <always_on>1</always_on>
         <update_rate>250</update_rate>
       </sensor>
+      <sensor name="air_pressure_sensor" type="air_pressure">
+        <always_on>1</always_on>
+        <update_rate>50</update_rate>
+        <air_pressure>
+          <pressure>
+            <noise type="gaussian">
+              <mean>0</mean>
+              <stddev>0.01</stddev>
+            </noise>
+          </pressure>
+        </air_pressure>
+      </sensor>
     </link>
     <link name="airspeed">
       <pose>0 0 0 0 0 0</pose>
@@ -685,6 +697,7 @@
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
       <joint_name>servo_0</joint_name>
       <sub_topic>servo_0</sub_topic>
+      <p_gain>10.0</p_gain>
     </plugin>
     <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
       <a0>0.05984281113</a0>
@@ -708,6 +721,7 @@
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
       <joint_name>servo_1</joint_name>
       <sub_topic>servo_1</sub_topic>
+      <p_gain>10.0</p_gain>
     </plugin>
     <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
       <a0>0.05984281113</a0>
@@ -767,6 +781,7 @@
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
       <joint_name>servo_2</joint_name>
       <sub_topic>servo_2</sub_topic>
+      <p_gain>10.0</p_gain>
     </plugin>
     <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
       <a0>0.0</a0>
@@ -789,6 +804,8 @@
     <plugin
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
       <joint_name>rudder_joint</joint_name>
+      <sub_topic>servo_3</sub_topic>
+      <p_gain>10.0</p_gain>
     </plugin>
     <plugin filename="ignition-gazebo-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_puller_joint</jointName>

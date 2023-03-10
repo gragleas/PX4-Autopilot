@@ -40,6 +40,15 @@
 
 void Ekf::controlOpticalFlowFusion(const imuSample &imu_delayed)
 {
+	if (_flow_buffer) {
+		// We don't fuse flow data immediately because we have to wait for the mid integration point to fall behind the fusion time horizon.
+		// This means we stop looking for new data until the old data has been fused, unless we are not fusing optical flow,
+		// in this case we need to empty the buffer
+		if (!_flow_data_ready || (!_control_status.flags.opt_flow && !_hagl_sensor_status.flags.flow)) {
+			_flow_data_ready = _flow_buffer->pop_first_older_than(imu_delayed.time_us, &_flow_sample_delayed);
+		}
+	}
+
 	// Check if on ground motion is un-suitable for use of optical flow
 	if (!_control_status.flags.in_air) {
 		updateOnGroundMotionForOpticalFlowChecks();
@@ -179,7 +188,7 @@ void Ekf::controlOpticalFlowFusion(const imuSample &imu_delayed)
 
 				} else {
 					_information_events.flags.reset_pos_to_last_known = true;
-					ECL_INFO("reset position to last known position");
+					ECL_INFO("reset position to last known (%.3f, %.3f)", (double)_last_known_pos(0), (double)_last_known_pos(1));
 					resetHorizontalPositionTo(_last_known_pos.xy(), 0.f);
 				}
 			}
@@ -212,7 +221,7 @@ void Ekf::controlOpticalFlowFusion(const imuSample &imu_delayed)
 				resetHorizontalVelocityTo(_flow_vel_ne, calcOptFlowMeasVar(_flow_sample_delayed));
 
 				// reset position, estimate is relative to initial position in this mode, so we start with zero error
-				ECL_INFO("reset position to last known");
+				ECL_INFO("reset position to last known (%.3f, %.3f)", (double)_last_known_pos(0), (double)_last_known_pos(1));
 				_information_events.flags.reset_pos_to_last_known = true;
 				resetHorizontalPositionTo(_last_known_pos.xy(), 0.f);
 
@@ -248,4 +257,14 @@ void Ekf::resetOnGroundMotionForOpticalFlowChecks()
 {
 	_time_bad_motion_us = 0;
 	_time_good_motion_us = _time_delayed_us;
+}
+
+void Ekf::stopFlowFusion()
+{
+	if (_control_status.flags.opt_flow) {
+		ECL_INFO("stopping optical flow fusion");
+		_control_status.flags.opt_flow = false;
+
+		resetEstimatorAidStatus(_aid_src_optical_flow);
+	}
 }

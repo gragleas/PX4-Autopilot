@@ -33,6 +33,7 @@
 
 add_library(ecl_EKF
 	airspeed_fusion.cpp
+	auxvel_fusion.cpp
 	baro_height_control.cpp
 	bias_estimator.cpp
 	control.cpp
@@ -53,6 +54,7 @@ add_library(ecl_EKF
 	gps_checks.cpp
 	gps_control.cpp
 	gps_yaw_fusion.cpp
+	gravity_fusion.cpp
 	height_control.cpp
 	imu_down_sampler.cpp
 	mag_control.cpp

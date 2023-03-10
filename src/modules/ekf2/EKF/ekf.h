@@ -191,6 +191,10 @@ public:
 	void getHaglRateInnovVar(float &hagl_rate_innov_var) const { hagl_rate_innov_var = _rng_consistency_check.getInnovVar(); }
 	void getHaglRateInnovRatio(float &hagl_rate_innov_ratio) const { hagl_rate_innov_ratio = _rng_consistency_check.getSignedTestRatioLpf(); }
 
+	void getGravityInnov(float grav_innov[3]) const { memcpy(grav_innov, _aid_src_gravity.innovation, sizeof(_aid_src_gravity.innovation)); }
+	void getGravityInnovVar(float grav_innov_var[3]) const { memcpy(grav_innov_var, _aid_src_gravity.innovation_variance, sizeof(_aid_src_gravity.innovation_variance)); }
+	void getGravityInnovRatio(float &grav_innov_ratio) const { grav_innov_ratio = Vector3f(_aid_src_gravity.test_ratio).max(); }
+
 	// get the state vector at the delayed time horizon
 	matrix::Vector<float, 24> getStateAtFusionHorizonAsVector() const;
 
@@ -329,6 +333,7 @@ public:
 	float getMagBiasLimit() const { return 0.5f; } // 0.5 Gauss
 
 	bool accel_bias_inhibited() const { return _accel_bias_inhibit[0] || _accel_bias_inhibit[1] || _accel_bias_inhibit[2]; }
+	bool gyro_bias_inhibited() const { return _gyro_bias_inhibit[0] || _gyro_bias_inhibit[1] || _gyro_bias_inhibit[2]; }
 
 	const auto &state_reset_status() const { return _state_reset_status; }
 
@@ -432,6 +437,8 @@ public:
 	const auto &aid_src_mag_heading() const { return _aid_src_mag_heading; }
 	const auto &aid_src_mag() const { return _aid_src_mag; }
 
+	const auto &aid_src_gravity() const { return _aid_src_gravity; }
+
 	const auto &aid_src_aux_vel() const { return _aid_src_aux_vel; }
 
 	const auto &aid_src_optical_flow() const { return _aid_src_optical_flow; }
@@ -481,12 +488,8 @@ private:
 
 	// booleans true when fresh sensor data is available at the fusion time horizon
 	bool _gps_data_ready{false};	///< true when new GPS data has fallen behind the fusion time horizon and is available to be fused
-	bool _rng_data_ready{false};
 	bool _flow_data_ready{false};	///< true when the leading edge of the optical flow integration period has fallen behind the fusion time horizon
-	bool _tas_data_ready{false};	///< true when new true airspeed data has fallen behind the fusion time horizon and is available to be fused
 	bool _flow_for_terrain_data_ready{false}; /// same flag as "_flow_data_ready" but used for separate terrain estimator
-
-	uint64_t _time_prev_gps_us{0};	///< time stamp of previous GPS data retrieved from the buffer (uSec)
 
 	uint64_t _time_last_horizontal_aiding{0}; ///< amount of time we have been doing inertial only deadreckoning (uSec)
 	uint64_t _time_last_v_pos_aiding{0};
@@ -531,8 +534,8 @@ private:
 
 	SquareMatrix24f P{};	///< state covariance matrix
 
-	Vector3f _delta_vel_bias_var_accum{};		///< kahan summation algorithm accumulator for delta velocity bias variance
 	Vector3f _delta_angle_bias_var_accum{};	///< kahan summation algorithm accumulator for delta angle bias variance
+	Vector3f _delta_vel_bias_var_accum{};   ///< kahan summation algorithm accumulator for delta velocity bias variance
 
 	Vector2f _drag_innov{};		///< multirotor drag measurement innovation (m/sec**2)
 	Vector2f _drag_innov_var{};	///< multirotor drag measurement innovation variance ((m/sec**2)**2)
@@ -571,6 +574,8 @@ private:
 
 	estimator_aid_source1d_s _aid_src_mag_heading{};
 	estimator_aid_source3d_s _aid_src_mag{};
+
+	estimator_aid_source3d_s _aid_src_gravity{};
 
 	estimator_aid_source2d_s _aid_src_aux_vel{};
 
@@ -614,9 +619,11 @@ private:
 
 	// variables used to inhibit accel bias learning
 	bool _accel_bias_inhibit[3] {};		///< true when the accel bias learning is being inhibited for the specified axis
+	bool _gyro_bias_inhibit[3] {};		///< true when the gyro bias learning is being inhibited for the specified axis
 	Vector3f _accel_vec_filt{};		///< acceleration vector after application of a low pass filter (m/sec**2)
 	float _accel_magnitude_filt{0.0f};	///< acceleration magnitude after application of a decaying envelope filter (rad/sec)
 	float _ang_rate_magnitude_filt{0.0f};		///< angular rate magnitude after application of a decaying envelope filter (rad/sec)
+	Vector3f _prev_delta_ang_bias_var{};	///< saved delta angle XYZ bias variances (rad/sec)
 	Vector3f _prev_dvel_bias_var{};		///< saved delta velocity XYZ bias variances (m/sec)**2
 
 	// Terrain height state estimation
@@ -671,8 +678,8 @@ private:
 	// apply sensible limits to the declination and length of the NE mag field states estimates
 	void limitDeclination();
 
-	void updateAirspeed(const airspeedSample &airspeed_sample, estimator_aid_source1d_s &airspeed) const;
-	void fuseAirspeed(estimator_aid_source1d_s &airspeed);
+	void updateAirspeed(const airspeedSample &airspeed_sample, estimator_aid_source1d_s &aid_src) const;
+	void fuseAirspeed(const airspeedSample &airspeed_sample, estimator_aid_source1d_s &aid_src);
 
 	// fuse synthetic zero sideslip measurement
 	void updateSideslip(estimator_aid_source1d_s &_aid_src_sideslip) const;
@@ -765,6 +772,12 @@ private:
 	bool measurementUpdate(Vector24f &K, float innovation_variance, float innovation)
 	{
 		for (unsigned i = 0; i < 3; i++) {
+			// gyro bias: states 10, 11, 12
+			if (_gyro_bias_inhibit[i]) {
+				K(10 + i) = 0.0f;
+			}
+
+			// accel bias: states 13, 14, 15
 			if (_accel_bias_inhibit[i]) {
 				K(13 + i) = 0.0f;
 			}
@@ -841,7 +854,7 @@ private:
 	void resetOnGroundMotionForOpticalFlowChecks();
 
 	// control fusion of GPS observations
-	void controlGpsFusion();
+	void controlGpsFusion(const imuSample &imu_delayed);
 	bool shouldResetGpsFusion() const;
 	bool isYawFailure() const;
 
@@ -870,7 +883,7 @@ private:
 	void run3DMagAndDeclFusions(const Vector3f &mag);
 
 	// control fusion of air data observations
-	void controlAirDataFusion();
+	void controlAirDataFusion(const imuSample &imu_delayed);
 
 	// control fusion of synthetic sideslip observations
 	void controlBetaFusion(const imuSample &imu_delayed);
@@ -918,6 +931,9 @@ private:
 
 	void updateGroundEffect();
 
+	// gravity fusion: heuristically enable / disable gravity fusion
+	void controlGravityFusion(const imuSample &imu_delayed);
+
 	// calculate the measurement variance for the optical flow sensor
 	float calcOptFlowMeasVar(const flowSample &flow_sample);
 
@@ -932,12 +948,15 @@ private:
 	void zeroQuatCov();
 	void resetMagCov();
 
-	// perform a limited reset of the wind state covariances
-	void resetWindCovarianceUsingAirspeed();
-
 	// perform a reset of the wind states and related covariances
 	void resetWind();
-	void resetWindUsingAirspeed();
+
+	// Reset the wind states using the current airspeed measurement, ground relative nav velocity, yaw angle and assumption of zero sideslip
+	void resetWindUsingAirspeed(const airspeedSample &airspeed_sample);
+
+	// perform a limited reset of the wind state covariances
+	void resetWindCovarianceUsingAirspeed(const airspeedSample &airspeed_sample);
+
 	void resetWindToZero();
 
 	// check that the range finder data is continuous
@@ -964,20 +983,19 @@ private:
 
 	bool isTimedOut(uint64_t last_sensor_timestamp, uint64_t timeout_period) const
 	{
-		return last_sensor_timestamp + timeout_period < _time_delayed_us;
+		return (last_sensor_timestamp == 0) || (last_sensor_timestamp + timeout_period < _time_delayed_us);
 	}
 
 	bool isRecent(uint64_t sensor_timestamp, uint64_t acceptance_interval) const
 	{
-		return sensor_timestamp + acceptance_interval > _time_delayed_us;
+		return (sensor_timestamp != 0) && (sensor_timestamp + acceptance_interval > _time_delayed_us);
 	}
 
 	bool isNewestSampleRecent(uint64_t sensor_timestamp, uint64_t acceptance_interval) const
 	{
-		return sensor_timestamp + acceptance_interval > _time_latest_us;
+		return (sensor_timestamp != 0) && (sensor_timestamp + acceptance_interval > _time_latest_us);
 	}
 
-	void startAirspeedFusion();
 	void stopAirspeedFusion();
 
 	void stopGpsFusion();
@@ -1017,8 +1035,6 @@ private:
 	HeightBiasEstimator _rng_hgt_b_est{HeightSensor::RANGE, _height_sensor_ref};
 	HeightBiasEstimator _ev_hgt_b_est{HeightSensor::EV, _height_sensor_ref};
 	PositionBiasEstimator _ev_pos_b_est{static_cast<uint8_t>(PositionSensor::EV), _position_sensor_ref};
-
-	void runYawEKFGSF(const imuSample &imu_delayed);
 
 	// Resets the main Nav EKf yaw to the estimator from the EKF-GSF yaw estimator
 	// Resets the horizontal velocity and position to the default navigation sensor

@@ -95,7 +95,7 @@
     	<pose>1.45 0.4 1.07 0 .05 0</pose>
     	<inertial>
         <pose>0 0 0 0 0 0</pose>
-        <mass>75</mass>
+        <mass>120</mass>
         <inertia>
           <ixx>1.36125</ixx>
           <ixy>0</ixy>
@@ -325,7 +325,7 @@
           </mesh>
         </geometry>
       </visual>
-      <collision name='collision'>
+      <collision name='rudder_1_collision'>
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
@@ -360,7 +360,7 @@
           </mesh>
         </geometry>
       </visual>
-      <collision name='collision'>
+      <collision name='rudder_2_collision'>
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
@@ -407,67 +407,59 @@
       </axis>
     </joint>
     
-    <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
-      <a0>0</a0>
-      <cla>0.1</cla>
-      <cda>0</cda>
-      <cma>0</cma>
-      <alpha_stall>0.261799</alpha_stall>
-      <cla_stall>-0.1</cla_stall>
-      <cda_stall>0</cda_stall>
-      <cma_stall>0</cma_stall>
-      <cp>2.1 2.51 4.3</cp>
-      <area>21.115</area>
-      <air_density>1.29</air_density>
+    <plugin name="gz::sim::systems::SailLiftDrag"
+        filename="asv_sim2-sail-lift-drag-system">
+      <a0>0.0</a0>
+      <cla>5.160550459</cla>
+      <alpha_stall>0.296706</alpha_stall>
+      <cla_stall>-0.7083</cla_stall>
+      <cda>0.63662</cda>
+      <area>6.69</area>
+      <fluid_density>1.2</fluid_density>
       <forward>-1 0 0</forward>
-      <upward>0 0 1</upward>
+      <upward>0 0 -1</upward>
+      <cp>0 2.51 0</cp>
       <link_name>wing_1</link_name>
-      <control_joint_name>base_link_wing_1</control_joint_name>
-      <control_joint_rad_to_cl>-1.0</control_joint_rad_to_cl>
+      <radial_symmetry>true</radial_symmetry>
+      <topic>lift_drag_1</topic>
     </plugin>
     
-    <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
-      <a0>0</a0>
-      <cla>0.1</cla>
-      <cda>0</cda>
-      <cma>0</cma>
-      <alpha_stall>0.261799</alpha_stall>
-      <cla_stall>-0.1</cla_stall>
-      <cda_stall>0</cda_stall>
-      <cma_stall>0</cma_stall>
-      <cp>4.1 2.51 4.3</cp>
-      <area>21.115</area>
-      <air_density>1.29</air_density>
+    <plugin name="gz::sim::systems::SailLiftDrag"
+        filename="asv_sim2-sail-lift-drag-system">
+      <a0>0.0</a0>
+      <cla>5.160550459</cla>
+      <alpha_stall>0.296706</alpha_stall>
+      <cla_stall>-0.7083</cla_stall>
+      <cda>0.63662</cda>
+      <area>6.69</area>
+      <fluid_density>1.2</fluid_density>
       <forward>-1 0 0</forward>
-      <upward>0 0 1</upward>
+      <upward>0 0 -1</upward>
+      <cp>0 2.51 0</cp>
       <link_name>wing_2</link_name>
-      <control_joint_name>base_link_wing_2</control_joint_name>
-      <control_joint_rad_to_cl>-1.0</control_joint_rad_to_cl>
+      <radial_symmetry>true</radial_symmetry>
+      <topic>lift_drag_2</topic>
     </plugin>
 		
 	<plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
       <a0>0</a0>
-      <cla>1.0</cla>
-      <cda>0</cda>
-      <cma>0</cma>
-      <alpha_stall>0.471239</alpha_stall>
-      <cla_stall>0.5</cla_stall>
-      <cda_stall>0.5</cda_stall>
-      <cma_stall>0</cma_stall>
+      <cla>5.730659026</cla>
+      <cda>0.3332</cda>
+      <alpha_stall>0.29</alpha_stall>
+      <cla_stall>-0.7083</cla_stall>
       <cp>0.5 0.02 0.12</cp>
-      <area>3.5</area>
-      <air_density>997</air_density>
-      <forward>-1 0 0</forward>
+      <area>0.5</area>
+      <air_density>1025</air_density>
+      <forward>0 0 -1</forward>
       <upward>0 1 0</upward>
       <link_name>rudder_1</link_name>
       <control_joint_name>servo_0</control_joint_name>
-      <control_joint_rad_to_cl>-0.3</control_joint_rad_to_cl>
     </plugin>
     <plugin
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
       <joint_name>servo_0</joint_name>
       <sub_topic>servo_0</sub_topic>
-      <p_gain>8</p_gain>
+      <p_gain>50</p_gain>
       <i_gain>2</i_gain>
       <i_max>1</i_max>
       <i_min>-1</i_min>
@@ -478,27 +470,23 @@
     
     <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
       <a0>0</a0>
-      <cla>1</cla>
-      <cda>0</cda>
-      <cma>0</cma>
-      <alpha_stall>0.471239</alpha_stall>
-      <cla_stall>0.5</cla_stall>
-      <cda_stall>0.5</cda_stall>
-      <cma_stall>0</cma_stall>
+      <cla>5.730659026</cla>
+      <cda>0.3332</cda>
+      <alpha_stall>0.29</alpha_stall>
+      <cla_stall>-0.7083</cla_stall>
       <cp>0.5 0.02 0.12</cp>
-      <area>3.5</area>
-      <air_density>997</air_density>
-      <forward>-1 0 0</forward>
+      <area>0.5</area>
+      <air_density>1025</air_density>
+      <forward>0 0 -1</forward>
       <upward>0 1 0</upward>
       <link_name>rudder_2</link_name>
       <control_joint_name>servo_1</control_joint_name>
-      <control_joint_rad_to_cl>-0.3</control_joint_rad_to_cl>
     </plugin>
     <plugin
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
       <joint_name>servo_1</joint_name>
       <sub_topic>servo_1</sub_topic>
-      <p_gain>8</p_gain>
+      <p_gain>50</p_gain>
       <i_gain>2</i_gain>
       <i_max>1</i_max>
       <i_min>-1</i_min>
@@ -507,7 +495,7 @@
     </plugin>
     
     <link name='wing_1'>
-      <pose>2.47482 2.49991 0.615342 1.57 0 3.14</pose>
+      <pose>2.47482 1.25 0.615342 1.57 0 1.57</pose>
       <inertial>
         <pose>.4 3.25 0 0 -0 0</pose>
         <mass>20</mass>
@@ -555,7 +543,7 @@
     </link>
     
     <link name='wing_2'>
-      <pose>4.51199 2.49807 0.615342 1.57 0 3.14</pose>
+      <pose>4.51199 1.25 0.615342 1.57 0 1.57</pose>
       <inertial>
         <pose>.4 3.25 0 0 -0 0</pose>
         <mass>20</mass>
@@ -663,34 +651,34 @@
       <motorType>velocity</motorType>
     </plugin>
     
-		    <!-- Hydrodynamics plugin -->
-		<plugin
-		    filename="libgz-waves1-hydrodynamics-system.so"
-		    name="gz::sim::systems::Hydrodynamics">
-		    
-		    <enable>boat_0::base_link</enable>
-		    <enable>boat_0::rudder_1</enable>
-		    <enable>boat_0::rudder_2</enable>
-		    <hydrodynamics>
-		      <damping_on>1</damping_on>
-		      <viscous_drag_on>1</viscous_drag_on>
-		      <pressure_drag_on>1</pressure_drag_on>
-		    
-		      <!-- Linear and Angular Damping -->
-		      <cDampL1>1.0E-6</cDampL1>
-		      <cDampL2>1.0E-6</cDampL2>
-		      <cDampR1>1.0E-6</cDampR1>
-		      <cDampR2>1.0E-6</cDampR2>
-		    
-		      <!-- 'Pressure' Drag -->
-		      <cPDrag1>1.0E+2</cPDrag1>
-		      <cPDrag2>1.0E+2</cPDrag2>
-		      <fPDrag>0.4</fPDrag>
-		      <cSDrag1>1.0E+2</cSDrag1>
-		      <cSDrag2>1.0E+2</cSDrag2>
-		      <fSDrag>0.4</fSDrag>
-		      <vRDrag>1.0</vRDrag>
-		    </hydrodynamics>
-		</plugin>
+	    <!-- Hydrodynamics plugin -->
+	<plugin
+	    filename="libgz-waves1-hydrodynamics-system.so"
+	    name="gz::sim::systems::Hydrodynamics">
+	    
+	    <enable>boat_0::base_link::base_collision</enable>
+	    <!--enable>boat_0::port_hull</enable>
+	    <enable>boat_0::starboard_hull</enable-->
+	    <hydrodynamics>
+	      <damping_on>1</damping_on>
+	      <viscous_drag_on>1</viscous_drag_on>
+	      <pressure_drag_on>1</pressure_drag_on>
+	    
+	      <!-- Linear and Angular Damping -->
+	      <cDampL1>1.0E-6</cDampL1>
+	      <cDampL2>1.0E-6</cDampL2>
+	      <cDampR1>1.0E-6</cDampR1>
+	      <cDampR2>1.0E-6</cDampR2>
+	    
+	      <!-- 'Pressure' Drag -->
+	      <cPDrag1>1.0E+2</cPDrag1>
+	      <cPDrag2>1.0E+2</cPDrag2>
+	      <fPDrag>0.04</fPDrag>
+	      <cSDrag1>1.0E+2</cSDrag1>
+	      <cSDrag2>1.0E+2</cSDrag2>
+	      <fSDrag>0.04</fSDrag>
+	      <vRDrag>1.0</vRDrag>
+	    </hydrodynamics>
+	</plugin>
   </model>
 </sdf>
