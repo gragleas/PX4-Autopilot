@@ -104,7 +104,7 @@
     </plugin-->
 
     <wind>
-      <linear_velocity>-6.17 0 0</linear_velocity>
+      <linear_velocity>0 10 0</linear_velocity>
     </wind>
 
     <scene>
